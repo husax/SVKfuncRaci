@@ -40,6 +40,9 @@
 		axis: true,
 		boundingbox: [-20, 10, 10, -15]
 	};
+
+	let jxgCajaId='cajaInicio';
+
 	let paramFunc = {
 		func: null,
 		name: '',
@@ -196,13 +199,10 @@
 	<Row>
 		<Col sm={4}>
 			<CajaMath bind:latex disabled={$muestra} on:click={handleClick} />
-			<!--
-        bind:this={caja}
-      /> -->
 			<Acordeon {items} {ActualizaGraf} muestra={$muestra} {animaRectaTang} />
 		</Col>
 		<Col sm={8}>
-			<JXGBoard {boardAttributes} />
+			<JXGBoard {boardAttributes} {jxgCajaId}/>
 		</Col>
 	</Row>
 </Container>

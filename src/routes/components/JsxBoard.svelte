@@ -1,15 +1,16 @@
-<script>
+<script lang="ts">
 import { onMount, beforeUpdate} from 'svelte';
-import { brd } from '../tools/Almacen.js';
+import { brd, boards, currentBrd } from '../tools/Almacen.js';
 
 export let boardAttributes= {
   axis: true,
   boundingbox: [-10, 10, 10, -10]
 };
-let jxgCaja='jxgbox';
+export let jxgCajaId: string;
 
 onMount( () => {
-  let board= JXG.JSXGraph.initBoard(jxgCaja, boardAttributes);
+  let board= JXG.JSXGraph.initBoard(jxgCajaId, boardAttributes);
+  currentBrd.update(() => $boards.push(board));
   brd.set(board);
 });
 
@@ -21,7 +22,7 @@ beforeUpdate(() => {
 
 export {brd};
 </script>
-<div id={jxgCaja} class="jxgbox" ></div>
+<div id={jxgCajaId} class="jxgbox" ></div>
 
 <style>
   div {

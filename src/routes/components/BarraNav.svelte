@@ -32,12 +32,12 @@ function handleUpdate(event: any) {
   <Collapse {isOpen} navbar expand="lg" on:update={handleUpdate}>
     <Nav  class="ms-auto text-light" navbar>
       <NavItem>
-        <NavLink href="#Home">Inicio</NavLink>
+        <NavLink href="/">Inicio</NavLink>
       </NavItem>
       <Dropdown title="Funciones" nav inNavbar>
         <DropdownToggle nav caret>Funciones</DropdownToggle>
         <DropdownMenu end>
-          <DropdownItem href="#home">
+          <DropdownItem href="/polin">
             Polinomiales
           </DropdownItem>
           <DropdownItem href="#home">
