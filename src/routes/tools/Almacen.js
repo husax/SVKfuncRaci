@@ -1,10 +1,6 @@
 import { writable } from 'svelte/store';
 // variable para referir al current board de JSXGraph
 export let brd = writable(null);
-// arreglo de boards creados en diferentes páginas
-export let boards = writable([]);
-// indice del board vigente
-export let currentBrd = writable(0);
 // contiene la función de trabajo actual
 export let funRac = writable({});
 // la función actual en formato latex

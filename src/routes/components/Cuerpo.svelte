@@ -7,9 +7,10 @@
 		idRaices,
 		idObjs,
 		idFuns,
-		animaTangId
+		animaTangId,
 	} from '../tools/Almacen';
 	import { Col, Container, Row, Button } from 'sveltestrap';
+	import { onDestroy} from 'svelte';
 	import CajaMath from './CajaMath.svelte';
 	import MsgModal from './MsgModal.svelte';
 	import JXGBoard from './JsxBoard.svelte';
@@ -43,6 +44,8 @@
 
 	let jxgCajaId='cajaInicio';
 
+	//brd.set(null);
+
 	let paramFunc = {
 		func: null,
 		name: '',
@@ -53,7 +56,11 @@
 		idRaices: []
 	};
 
-	//let caja;
+	onDestroy( () => {
+  	console.log("destruyó componente Cuerpo");
+		muestra.set(false);
+	});
+
 
 	const handleClick = () => {
 		if (!$muestra) {

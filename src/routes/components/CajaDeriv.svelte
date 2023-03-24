@@ -10,13 +10,13 @@
   import { MathQuillStatic } from "svelte-mathquill";
 
   export let latex: string;
-  export let animaRectaTang;
+  export let animaRectaTang: Function;
   let siGraf: boolean;
   let siRectaTan = false;
 
   const GrafDer = () => {
     let paramFunc = {
-      func: (x) => $funRac.Derivada().Evalua(x),
+      func: (x: number) => $funRac.Derivada().Evalua(x),
       name: "P'",
       color: "red",
       idFuns: $idFuns,
@@ -35,7 +35,7 @@
   const muestraRectaTang = () => {
     let param = {
       func: $idFuns[0],
-      deriv: (x) => $funRac.Derivada().Evalua(x),
+      deriv: (x: number) => $funRac.Derivada().Evalua(x),
       color: "blue",
       idObjs: $idObjs,
     };

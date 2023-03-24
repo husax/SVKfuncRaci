@@ -1,14 +1,7 @@
 <script lang="ts">
   import { InputGroup, InputGroupText, Button } from "sveltestrap";
-  //import EditableMathField from "./EditableMathField.svelte";
-  //import StaticMathField from "./StaticMathField.svelte";
-  import { muestra } from "../tools/Almacen.js";
   import { MathQuill, MathQuillStatic } from "svelte-mathquill";
   export let latex: string;
-  //let cajamat; 
-  //export function focus() {
-  //  cajamat.focus();
-  //}
   export let disabled: boolean;
 
   function filtro(e: any) {
@@ -36,19 +29,6 @@
 
 <InputGroup size="lg" class="mb-3">
   <InputGroupText id="basic-addon1">P(x) =</InputGroupText>
-  <!--
-  {#if disabled}
-    <StaticMathField {latex} />
-  {/if}
-  <EditableMathField
-    bind:this={cajamat}
-    {latex}
-    config={{
-      charsThatBreakOutOfSupSub: "+-()",
-      autoCommands: "pi sqrt",
-    }}
-    {disabled}
-  />  -->
   {#if disabled}
     <MathQuillStatic {latex} />
   {:else}

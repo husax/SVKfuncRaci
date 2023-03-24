@@ -1,6 +1,6 @@
 <script lang="ts">
-import { onMount, beforeUpdate} from 'svelte';
-import { brd, boards, currentBrd } from '../tools/Almacen.js';
+import { onMount, beforeUpdate, onDestroy} from 'svelte';
+import { brd } from '../tools/Almacen.js';
 
 export let boardAttributes= {
   axis: true,
@@ -10,8 +10,12 @@ export let jxgCajaId: string;
 
 onMount( () => {
   let board= JXG.JSXGraph.initBoard(jxgCajaId, boardAttributes);
-  currentBrd.update(() => $boards.push(board));
   brd.set(board);
+});
+
+onDestroy( () => {
+  console.log("destruyó componente JsxGraph");
+  brd.set(null);
 });
 
 beforeUpdate(() => {

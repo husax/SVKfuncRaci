@@ -1,5 +1,4 @@
 <script lang="ts">
-import { Styles }  from 'sveltestrap';
 import {
   Collapse, 
   Navbar,

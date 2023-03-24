@@ -6,7 +6,7 @@ let boardAttributes = {
 		boundingbox: [-20, 10, 10, -15]
 	};
 
-brd.set(null);
+//brd.set(null);
 let jxgCajaId='cajaPolin';
 </script>
 <p>Aqui entro bien y veremos si sale</p>
