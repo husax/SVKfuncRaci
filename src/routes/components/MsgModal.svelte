@@ -15,11 +15,12 @@
 		});
 	}
 </script>
-
-<Modal isOpen={open} backdrop={false} {toggle}>
-	<ModalHeader class="bg-danger" toggle={Cierra}>Expresión inválida</ModalHeader>
-	<ModalBody>{msg}</ModalBody>
-	<ModalFooter>
-		<Button color="danger" on:click={Cierra}>Cerrar</Button>
-	</ModalFooter>
-</Modal>
+<div>
+	<Modal isOpen={open} backdrop={false} {toggle}>
+		<ModalHeader class="bg-danger" toggle={Cierra}>Expresión inválida</ModalHeader>
+		<ModalBody>{msg}</ModalBody>
+		<ModalFooter>
+			<Button color="danger" on:click={Cierra}>Cerrar</Button>
+		</ModalFooter>
+	</Modal>
+</div>

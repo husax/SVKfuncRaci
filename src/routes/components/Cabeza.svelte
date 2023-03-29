@@ -2,6 +2,7 @@
   import { Col, Container, Image, Row } from "sveltestrap";
   import BarraNav from "./BarraNav.svelte";
   let logoImg = "/logo.jpg";
+  export let funcTipo: string; 
 </script>
 
 <Container fluid>
@@ -18,7 +19,7 @@
   </Row>
   <Row>
     <Col>
-      <BarraNav />
+      <BarraNav {funcTipo} />
     </Col>
   </Row>
 </Container>

@@ -201,8 +201,8 @@
 	};
 </script>
 
+<MsgModal {open} {msg} on:cierra={toggle} />
 <Container fluid>
-	<MsgModal {open} {msg} on:cierra={toggle} />
 	<Row>
 		<Col sm={4}>
 			<CajaMath bind:latex disabled={$muestra} on:click={handleClick} />

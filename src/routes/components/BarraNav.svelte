@@ -13,9 +13,12 @@ import {
   DropdownItem
 } from 'sveltestrap';
 
+export let funcTipo: string="Algebraicas";
+
 let isOpen = false;
 
 const toggle= () => (isOpen = !isOpen);
+
 
 function handleUpdate(event: any) {
     isOpen = event.detail.isOpen;
@@ -25,7 +28,7 @@ function handleUpdate(event: any) {
 
 <Navbar class="navbar-dark bg-dark navbar-expand-lg">
   <NavbarBrand href="#home" class="text-white">
-    Funciones Algebraicas:
+    Funciones {funcTipo}:
   </NavbarBrand>
   <NavbarToggler on:click={toggle} class="me-2"  />
   <Collapse {isOpen} navbar expand="lg" on:update={handleUpdate}>

@@ -1,6 +1,8 @@
 <script lang="ts">
-import JXGBoard from './JsxBoard.svelte';
-import {brd} from '../tools/Almacen';
+	import { Col, Container, Row, Button } from 'sveltestrap';
+	import JXGBoard from './JsxBoard.svelte';
+	import {brd} from '../tools/Almacen';
+	import ElegirPolin from './ElegirPolin.svelte';
 let boardAttributes = {
 		axis: true,
 		boundingbox: [-20, 10, 10, -15]
@@ -9,6 +11,14 @@ let boardAttributes = {
 //brd.set(null);
 let jxgCajaId='cajaPolin';
 </script>
-<p>Aqui entro bien y veremos si sale</p>
-<JXGBoard {boardAttributes} {jxgCajaId} />
+<Container fluid>
+	<Row>
+		<Col sm={4}>
+			<ElegirPolin />
+		</Col>
+		<Col sm={8}>
+			<JXGBoard {boardAttributes} {jxgCajaId} />
+		</Col>
+	</Row>		
+</Container>
 
