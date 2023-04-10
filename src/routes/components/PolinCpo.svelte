@@ -14,7 +14,7 @@ let jxgCajaId='cajaPolin';
 <Container fluid>
 	<Row>
 		<Col sm={4}>
-			<ElegirPolin />
+			<ElegirPolin latex={'x^3-3x+1'}/>
 		</Col>
 		<Col sm={8}>
 			<JXGBoard {boardAttributes} {jxgCajaId} />

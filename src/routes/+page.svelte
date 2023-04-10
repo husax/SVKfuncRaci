@@ -11,7 +11,7 @@
 <JSXSetup/>
 <div>
 
-  <Cabeza />
+  <Cabeza funcTipo="Racionales" />
 	<Cuerpo />
 </div>
 

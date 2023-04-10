@@ -10,20 +10,20 @@
     CardTitle
   } from 'sveltestrap';
   import { ListGroup, ListGroupItem } from 'sveltestrap';
+  import { MathQuillStatic, MathQuill } from "svelte-mathquill";
+  export let latex: string;
 </script>
 
 <Card class="mb-3">
   <CardHeader>
-    <CardTitle>Card title</CardTitle>
+    <CardTitle>Elige un polinomio o propon un polinomio</CardTitle>
   </CardHeader>
   <CardBody>
-    <CardSubtitle>Card subtitle</CardSubtitle>
+    <CardSubtitle>Polinomios</CardSubtitle>
     <CardText>
-      Elige un polinomio de la lista o propon un polinomio
-      <h4>Anchors</h4>
       <ListGroup>
-        <ListGroupItem active tag="a" href="#" action>
-          Active
+        <ListGroupItem tag="a" href="#" action>
+          <MathQuillStatic {latex} />
         </ListGroupItem>
         <ListGroupItem tag="a" href="#" action>Bravo</ListGroupItem>
         <ListGroupItem tag="a" href="#" action>
@@ -37,5 +37,4 @@
     </CardText>
     <Button>Button</Button>
   </CardBody>
-  <CardFooter>Footer</CardFooter>
 </Card>
