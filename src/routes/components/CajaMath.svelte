@@ -4,6 +4,7 @@
   export let latex: string;
   export let disabled: boolean;
 
+
   function filtro(e: any) {
     const teclasEsp = [
       "ArrowLeft",
@@ -24,6 +25,11 @@
     // impide que se realice la acción por defecto del evento
     e.preventDefault();
   }
+
+  let config= {
+    charsThatBreakOutOfSupSub: "+-()",
+    autoCommands: "pi sqrt",
+  };
   console.log(latex);
 </script>
 
@@ -32,7 +38,7 @@
   {#if disabled}
     <MathQuillStatic {latex} />
   {:else}
-    <MathQuill bind:latex={latex} />
+    <MathQuill bind:latex={latex} {config} />
   {/if}
   <Button color={"success"} size="sm" on:click>
     {disabled ? "Cambia función" : "Aceptar"}

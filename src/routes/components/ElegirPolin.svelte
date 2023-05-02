@@ -10,8 +10,8 @@
     CardTitle
   } from 'sveltestrap';
   import { ListGroup, ListGroupItem } from 'sveltestrap';
-  import { MathQuillStatic, MathQuill } from "svelte-mathquill";
-  export let latex: string;
+  import { MathQuillStatic } from "svelte-mathquill";
+  export let arrLatex: string[];
 </script>
 
 <Card class="mb-3">
@@ -22,19 +22,15 @@
     <CardSubtitle>Polinomios</CardSubtitle>
     <CardText>
       <ListGroup>
+        {#each arrLatex as latex }
+          <ListGroupItem tag="a" href="#" action>
+            <MathQuillStatic {latex} />
+          </ListGroupItem>          
+        {/each}
         <ListGroupItem tag="a" href="#" action>
-          <MathQuillStatic {latex} />
-        </ListGroupItem>
-        <ListGroupItem tag="a" href="#" action>Bravo</ListGroupItem>
-        <ListGroupItem tag="a" href="#" action>
-          Charlie
-        </ListGroupItem>
-        <ListGroupItem tag="a" href="#" action>Delta</ListGroupItem>
-        <ListGroupItem disabled tag="a" href="#" action>
-          Disabled
+          Otro Polinomio
         </ListGroupItem>
       </ListGroup>
     </CardText>
-    <Button>Button</Button>
   </CardBody>
 </Card>

@@ -4,6 +4,22 @@
 	import { MathQuillSetup } from "svelte-mathquill";
 	import JSXSetup from "./components/JSXSetup.svelte";
   import { Styles } from "sveltestrap";
+	import type {OptMenu} from "./tools/tipos";
+	let opcMenu: OptMenu[]= [
+		{
+			href: "/polin",
+			texto: "Polinomio"
+		},
+		{
+			href: "#home",
+			texto: "Racionales"
+		},
+		{
+			href: "#home",
+			texto: "Radicales"
+		},
+	];
+
 </script>
 
 <Styles />
@@ -11,7 +27,7 @@
 <JSXSetup/>
 <div>
 
-  <Cabeza funcTipo="Racionales" />
+  <Cabeza funcTipo="Racionales" {opcMenu} />
 	<Cuerpo />
 </div>
 

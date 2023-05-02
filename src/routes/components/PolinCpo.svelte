@@ -10,15 +10,16 @@ let boardAttributes = {
 
 //brd.set(null);
 let jxgCajaId='cajaPolin';
+let arrL=['x^3-3x+1', '5x^5-3x^2+1'];
 </script>
 <Container fluid>
 	<Row>
 		<Col sm={4}>
-			<ElegirPolin latex={'x^3-3x+1'}/>
+			<ElegirPolin arrLatex={arrL}/>
 		</Col>
-		<Col sm={8}>
+		<!-- <Col sm={8}>
 			<JXGBoard {boardAttributes} {jxgCajaId} />
-		</Col>
+		</Col> -->
 	</Row>		
 </Container>
 

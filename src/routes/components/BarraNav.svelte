@@ -12,8 +12,10 @@ import {
   DropdownMenu,
   DropdownItem
 } from 'sveltestrap';
+import type {OptMenu} from "../tools/tipos";
 
 export let funcTipo: string="Algebraicas";
+export let opcMenu: OptMenu[];
 
 let isOpen = false;
 
@@ -39,15 +41,11 @@ function handleUpdate(event: any) {
       <Dropdown title="Funciones" nav inNavbar>
         <DropdownToggle nav caret>Funciones</DropdownToggle>
         <DropdownMenu end>
-          <DropdownItem href="/polin">
-            Polinomiales
+          {#each opcMenu as op }
+          <DropdownItem href={op.href}>
+            {op.texto}
           </DropdownItem>
-          <DropdownItem href="#home">
-            Racionales
-          </DropdownItem>
-          <DropdownItem href="#home">
-            Radicales
-          </DropdownItem>
+          {/each}
           <DropdownItem divider/>
         </DropdownMenu>
       </Dropdown>
