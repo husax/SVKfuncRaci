@@ -4,21 +4,26 @@
 	import { MathQuillSetup } from "svelte-mathquill";
 	import JSXSetup from "./components/JSXSetup.svelte";
   import { Styles } from "sveltestrap";
-	import type {OptMenu} from "./tools/tipos";
-	let opcMenu: OptMenu[]= [
-		{
-			href: "/polin",
-			texto: "Polinomio"
-		},
-		{
-			href: "#home",
-			texto: "Racionales"
-		},
-		{
-			href: "#home",
-			texto: "Radicales"
-		},
-	];
+	import type {OptMenu, DatosHead} from "./tools/tipos";
+	let datosH: DatosHead= {
+		funcTipo: "Racionales",
+		tarea: "",
+		titMnu: "Funciones",
+		opcMnu: [
+			{
+				href: "/polin",
+				texto: "Polinomiales"
+			},
+			{
+				href: "#home",
+				texto: "Racionales"
+			},
+			{
+				href: "#home",
+				texto: "Radicales"
+			}
+		]
+	};
 
 </script>
 
@@ -27,7 +32,7 @@
 <JSXSetup/>
 <div>
 
-  <Cabeza funcTipo="Racionales" {opcMenu} />
+  <Cabeza {datosH} />
 	<Cuerpo />
 </div>
 

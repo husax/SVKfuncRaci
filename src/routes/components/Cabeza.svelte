@@ -1,10 +1,18 @@
 <script lang="ts">
   import { Col, Container, Image, Row } from "sveltestrap";
   import BarraNav from "./BarraNav.svelte";
-  import type {OptMenu} from "../tools/tipos";
+  import type {OptMenu, DatosHead} from "../tools/tipos";
   let logoImg = "/logo.jpg";
-  export let funcTipo: string; 
-  export let opcMenu: OptMenu[];
+  let opc: OptMenu[]= [{
+    href: "",
+    texto: "",
+  }];
+  export let datosH: DatosHead= {
+    funcTipo: "",
+		tarea: "",
+		titMnu: "",
+		opcMnu: opc,
+  };
 </script>
 
 <Container fluid>
@@ -21,7 +29,7 @@
   </Row>
   <Row>
     <Col>
-      <BarraNav {funcTipo} {opcMenu} />
+      <BarraNav {datosH} />
     </Col>
   </Row>
 </Container>

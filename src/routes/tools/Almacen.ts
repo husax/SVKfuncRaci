@@ -1,8 +1,10 @@
 import { writable } from 'svelte/store';
+import Polinomio, { FunRacional } from './Polinomio';
+import JXG from './jsxgraphcore.mjs';
 // variable para referir al current board de JSXGraph
-export let brd = writable(null);
+export const brd = writable(JXG.board);
 // contiene la función de trabajo actual
-export let funRac = writable({});
+export let funRac = writable(new FunRacional());
 // la función actual en formato latex
 //export let latexFun = writable("");
 // variable para saber cuando mostrar o esconder el acordeón

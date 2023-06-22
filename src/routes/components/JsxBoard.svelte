@@ -1,4 +1,5 @@
 <script lang="ts">
+import JXG from '../tools/jsxgraphcore.mjs';
 import { onMount, beforeUpdate, onDestroy} from 'svelte';
 import { brd } from '../tools/Almacen.js';
 
@@ -24,7 +25,9 @@ beforeUpdate(() => {
   }
 });
 
-export {brd};
+console.log("version jsxgraph:", JXG.version);
+
+//export {brd};
 </script>
 <div id={jxgCajaId} class="jxgbox" ></div>
 

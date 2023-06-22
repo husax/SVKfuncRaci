@@ -17,7 +17,7 @@
 	import Acordeon from './Acordeon.svelte';
 
 	import TeXToLinealPyt from '../tools/TeXToLineal';
-	import InfijaAPolaca from '../tools/InfAPolInvCls';
+	import {InfijaAPolacaFR} from '../tools/InfAPolInv';
 	import { ArrNum, ArrNumToString, cadBul, calcExtremos } from '../tools/ConvierteData';
 	import {
 		GraficaNueva,
@@ -115,14 +115,19 @@
 			disabled = true;
 			return false;
 		}
-		let procesaInfija = new InfijaAPolaca(cad);
+		let procesaInfija = new InfijaAPolacaFR(cad);
 		procesaInfija.InfAPol();
 		if (procesaInfija.numError !== 0) {
 			open = !open;
-			msg = InfijaAPolaca.errores[-procesaInfija.numError];
+			msg = InfijaAPolacaFR.errores[-procesaInfija.numError];
 			return false;
 		}
-		funRac.set(procesaInfija.EvalFuncRac(procesaInfija.postFija));
+		let variables= procesaInfija.variables;
+		let funrac2= InfijaAPolacaFR.EvalFuncRac(procesaInfija.postFija, variables);
+		if (funrac2 !== undefined) {
+			funRac.set(funrac2);
+		}
+		funRac.set(InfijaAPolacaFR.EvalFuncRac(procesaInfija.postFija));
 		if ($funRac.esPolinomio) {
 			cadFunRac = $funRac.toString();
 		} else {

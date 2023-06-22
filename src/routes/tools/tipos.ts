@@ -3,4 +3,11 @@ interface OptMenu {
   texto: string;
 }
 
-export type {OptMenu}
+interface DatosHead {
+  funcTipo: string;
+	tarea: string;
+	titMnu: string;
+  opcMnu: OptMenu[];
+}
+
+export type {OptMenu, DatosHead}

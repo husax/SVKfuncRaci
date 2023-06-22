@@ -16,7 +16,7 @@
 
 <Card class="mb-3">
   <CardHeader>
-    <CardTitle>Elige un polinomio o propon un polinomio</CardTitle>
+    <CardTitle>Elige o propon un polinomio</CardTitle>
   </CardHeader>
   <CardBody>
     <CardSubtitle>Polinomios</CardSubtitle>
