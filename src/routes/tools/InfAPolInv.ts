@@ -1,8 +1,9 @@
 
-import Polin from "./Polinomio";
-import { FunRacional } from "./Polinomio";
+import { Polinomio, FunRacional } from "./Polinomio";
 
 type paresNumber = [number, number];
+type funTipo= FunRacional | Polinomio;
+
 class ParCadInt {
   #cad: string;
   #jerar: number;
@@ -717,7 +718,8 @@ class InfijaAPolaca {
     }
   }
 
-  static IniciaErrores() {
+  static IniciaErrores(): void {
+    InfijaAPolaca.errores= new Array(50).fill("");
     InfijaAPolaca.errores[0] = "";
     InfijaAPolaca.errores[1] = "Hay un caracter inválido.";
     InfijaAPolaca.errores[2] = "No hay expresión a procesar.";
@@ -760,9 +762,10 @@ class InfijaAPolaca {
     InfijaAPolaca.errores[26] = "Debe haber una expresión antes del signo =";
     InfijaAPolaca.errores[27] = "Debe haber una expresión después del signo =";
     InfijaAPolaca.errores[28] =
-      "NO puede haber más de un igual en una ecuación";
-      InfijaAPolaca.errores[30] = "Hay más de una variable en la expresión";
-      InfijaAPolaca.errores[31] =
+      "No puede haber más de un igual en una ecuación";
+    InfijaAPolaca.errores[29] = "Hay un eperador invalido."
+    InfijaAPolaca.errores[30] = "Hay más de una variable en la expresión";
+    InfijaAPolaca.errores[31] =
       "El exponente debe ser una constante. No se obtiene una función racional";  
   }
 }
@@ -783,27 +786,30 @@ class InfijaAPolacaFR extends InfijaAPolaca {
   // entrega una funcion polinomial, o una funcion racional según sea el caso
   // el número de error lo entrega en la propiedad numError
   static EvalFuncRac(postFija: ParCadInt[], variables: DicVariables) 
-                      : FunRacional | Polin | undefined {
+                      : funTipo | undefined {
     let numero;
     let oper1;
     let oper2;
     let par;
     const nomvar = Object.keys(variables);
     let variable = nomvar.length > 2 ? nomvar[2] : "";
-    const pilaCalc: (FunRacional | Polin)[] = [];
+    const pilaCalc: funTipo[] = [];
+    let result: funTipo | undefined;
     postFija.forEach((pf: ParCadInt) => {
       let pol;
       par = pf;
       switch (par.jerar) {
         case 2: // operadores + o - binarios
         case 4: // operadores * o /
-          
-
           oper1 = pilaCalc.pop();
           oper2 = pilaCalc.pop();
           if (oper1 !== undefined && oper2 !== undefined) {
-            pilaCalc.push(InfijaAPolacaFR.operaBinFun(oper1, oper2, par.cad));  
-          }
+            result=InfijaAPolacaFR.operaBinFun(oper1, oper2, par.cad);
+            if (result === undefined) {
+              return undefined;
+            }
+            pilaCalc.push(result);
+;          }
           else {
             InfijaAPolaca.nErr = -20; // error: se perdio un operando
             return undefined;
@@ -817,7 +823,11 @@ class InfijaAPolacaFR extends InfijaAPolaca {
               InfijaAPolaca.nErr = -31; // el exponente debe ser una constante
               return undefined;
             }
-            pilaCalc.push(InfijaAPolacaFR.operaBinFun(oper1, oper2, par.cad));
+            result=InfijaAPolacaFR.operaBinFun(oper1, oper2, par.cad);
+            if (result === undefined) {
+              return undefined;
+            }
+            pilaCalc.push(result);
           }
           else {
             InfijaAPolaca.nErr = -20; // error: se perdio un operando
@@ -844,9 +854,9 @@ class InfijaAPolacaFR extends InfijaAPolaca {
               InfijaAPolaca.nErr = -30; // error: hay más de una variable en la expresión.
               return undefined;
             }
-            pol = Polin.Monomio(1, 1, variable);
+            pol = Polinomio.Monomio(1, 1, variable);
           } else {
-            pol = Polin.Monomio(numero, 0, variable);
+            pol = Polinomio.Monomio(numero, 0, variable);
           }
           pilaCalc.push(pol);
           break;
@@ -862,13 +872,14 @@ class InfijaAPolacaFR extends InfijaAPolaca {
     return pilaCalc.pop();
   }
 
-  static operaBinFun(opd1 : FunRacional | Polin,
-                     opd2 : FunRacional | Polin,
-                     operador: string) {
+  static operaBinFun(opd1 : funTipo,
+                     opd2 : funTipo,
+                     operador: string): funTipo | undefined {
     switch (operador) {
       case "+": 
         if (!opd2.esPolinomio && !opd1.esPolinomio) {
-          return opd2.Suma(opd1);          
+
+          return opd2.Suma(opd1 as FunRacional);          
         }
         if (!opd2.esPolinomio && opd1.esPolinomio) {
           return opd2.Suma(new FunRacional(opd1));
@@ -876,23 +887,23 @@ class InfijaAPolacaFR extends InfijaAPolaca {
         if (opd2.esPolinomio && !opd1.esPolinomio) {
           return opd1.Suma(new FunRacional(opd2));
         }   
-        return opd2.Suma(opd1);
+        return (opd2 as Polinomio).Suma(opd1 as Polinomio);
       // break;
       case "-": // falta el caso funRac - Polin
       if (!opd2.esPolinomio && !opd1.esPolinomio) {
-        return opd2.Resta(opd1);          
+        return opd2.Resta(opd1 as FunRacional);          
       }
       if (!opd2.esPolinomio && opd1.esPolinomio) {
         return opd2.Resta(new FunRacional(opd1));
       }
       if (opd2.esPolinomio && !opd1.esPolinomio) {
-        return (new FunRacional(opd2)).Resta(opd1);
+        return (new FunRacional(opd2)).Resta(opd1 as FunRacional);
       }
-      return opd2.Resta(opd1);
+      return (opd2 as Polinomio).Resta(opd1);
       // break;
       case "*":
         if (!opd2.esPolinomio && !opd1.esPolinomio) {
-          return opd2.Producto(opd1);          
+          return opd2.Producto(opd1 as FunRacional);          
         }
         if (!opd2.esPolinomio && opd1.esPolinomio) {
           return opd2.Producto(new FunRacional(opd1));
@@ -900,7 +911,7 @@ class InfijaAPolacaFR extends InfijaAPolaca {
         if (opd2.esPolinomio && !opd1.esPolinomio) {
           return opd1.Producto(new FunRacional(opd2));
         }
-        return opd2.Producto(opd1);
+        return (opd2 as Polinomio).Producto(opd1);
       // break;
       case "/":
         if (opd1.esConstante) {
@@ -913,14 +924,16 @@ class InfijaAPolacaFR extends InfijaAPolaca {
           return opd2.Cociente(new FunRacional(opd1));
         }
         if (opd2.esPolinomio && !opd1.esPolinomio) {
-          return (new FunRacional(opd2)).Cociente(opd1);
+          return (new FunRacional(opd2)).Cociente(opd1 as FunRacional);
         }
-        return opd2.Cociente(opd1);
+        return opd2.Cociente(opd1 as FunRacional);
       // break;
       case "^":
-        return opd2.Potencia(opd1.coefs[0]);
-      // break;
+          return opd2.Potencia(opd1.coefs[0]);
+      break;
       default:
+        InfijaAPolacaFR.nErr= -29; // error: Hay un operador inválido 
+        return undefined;
         break;
     }
   }

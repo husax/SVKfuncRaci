@@ -1,7 +1,7 @@
 <script lang="ts">
 import JXG from '../tools/jsxgraphcore.mjs';
 import { onMount, beforeUpdate, onDestroy} from 'svelte';
-import { brd } from '../tools/Almacen.js';
+import { brd } from '../tools/Almacen';
 
 export let boardAttributes= {
   axis: true,
@@ -16,11 +16,11 @@ onMount( () => {
 
 onDestroy( () => {
   console.log("destruyó componente JsxGraph");
-  brd.set(null);
+  brd.set(undefined);
 });
 
 beforeUpdate(() => {
-  if ($brd !== null) {
+  if ($brd !== undefined) {
     $brd.setBoundingBox(boardAttributes.boundingbox);
   }
 });

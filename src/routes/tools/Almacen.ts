@@ -1,17 +1,18 @@
 import { writable } from 'svelte/store';
-import Polinomio, { FunRacional } from './Polinomio';
-import JXG from './jsxgraphcore.mjs';
+import type {Polinomio, FunRacional } from './Polinomio';
+import type JXG from './jsxgraphcore.mjs';
+import type { GeomElem } from './tipos';
 // variable para referir al current board de JSXGraph
-export const brd = writable(JXG.board);
+export const brd = writable<typeof JXG.board>();
 // contiene la función de trabajo actual
-export let funRac = writable(new FunRacional());
+type IDTiposFun= FunRacional | Polinomio | undefined; 
+export const funRac = writable<IDTiposFun>();
 // la función actual en formato latex
 //export let latexFun = writable("");
 // variable para saber cuando mostrar o esconder el acordeón
-export let muestra = writable(false);
+export const muestra = writable(false);
 // contiene las raices de la función como objeto del board
-export let idRaices = writable([]);
-
-export let idObjs = writable([]);
-export let idFuns = writable([]);
-export let animaTangId = writable(0);
+export const idRaices = writable<GeomElem>();
+export const idObjs = writable([]);
+export const idFuns = writable([]);
+export const animaTangId = writable(0);

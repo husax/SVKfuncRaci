@@ -1,7 +1,9 @@
 import { Punto } from "./vector";
 import { brd, idObjs, idFuns, animaTangId } from "./Almacen";
-
-const GraficaNueva = (brd, param) => {
+import type JXG from './jsxgraphcore.mjs';
+import type { paramF, paramD, GeomElem } from "./tipos";
+type Board= typeof JXG.Board;
+const GraficaNueva: (brd:Board, param: paramF) => GeomElem = (brd: Board , param: paramF) => {
   brd.suspendUpdate();
   BorraObjGraficos(brd, param);
   const fun1 = brd.create("functiongraph", [param.func], {
@@ -14,9 +16,9 @@ const GraficaNueva = (brd, param) => {
   return param.idFuns.slice();
 };
 
-const EliminaMultiples = (arr) => {
-  let rzant = null;
-  const result = [];
+const EliminaMultiples = (arr: number[]) => {
+  let rzant: number;
+  const result: number[] = [];
   arr.forEach((elem) => {
     if (elem !== rzant) {
       result.push(elem);
@@ -26,9 +28,8 @@ const EliminaMultiples = (arr) => {
   return result;
 };
 
-const YaTrazadas = (r, p) => {
-  const pant = p.idRaices;
-  const rcoor = pant.map((valor) => valor.coords.usrCoords[1]);
+const YaTrazadas = (r: number[], p:paramF) => {
+  const rcoor = p.idRaices.map((valor) => valor.coords.usrCoords[1]);
   if (rcoor.length === 0) {
     return false;
   }
@@ -40,7 +41,7 @@ const YaTrazadas = (r, p) => {
   return true;
 };
 
-const GraficaRaices = (brd, param) => {
+const GraficaRaices = (brd: Board, param: paramF) => {
   const raices = EliminaMultiples(param.raices);
   if (YaTrazadas(raices, param)) {
     return param.idRaices;
@@ -58,7 +59,7 @@ const GraficaRaices = (brd, param) => {
   return param.idRaices; // ver esto
 };
 
-const BorraObjGraficos = (brd, param) => {
+const BorraObjGraficos = (brd: Board, param: paramF) => {
   brd.suspendUpdate();
   while (param.idFuns.length > 0) {
     brd.removeObject(param.idFuns.pop().id, false);
@@ -82,6 +83,7 @@ const BorraRectaTang = () => {
     window.cancelAnimationFrame(id);
     console.log(id);
   });
+
   while (objs.length > 0) {
     board.removeObject(objs.pop().id, false);
   }
@@ -103,9 +105,9 @@ const BorraGrafDer = () => {
   }
 };
 
-const AgregaGrafica = (brd, param) => {
+const AgregaGrafica = (brd: Board, param: paramF) => {
   brd.suspendUpdate();
-  let fun1 = brd.create("functiongraph", [param.func], {
+  const fun1 = brd.create("functiongraph", [param.func], {
     strokewidth: 2,
     name: param.name,
     strokecolor: param.color,
@@ -117,27 +119,27 @@ const AgregaGrafica = (brd, param) => {
 
 // convierte puntos en pixeles a puntos en el sistema de coordenadas de brd
 // recibe un punto o un arreglo de puntos.
-const DesdePixeles = (pto, brd) => {
-  if (typeof pto.x === "number") {
-    let [xmin, ymax, xmax, ymin] = brd.getBoundingBox();
-    let pixXUnidad = new Punto(
+function DesdePixelesP (pto: Punto , brd: Board): Punto {
+    const [xmin, ymax, xmax, ymin] = brd.getBoundingBox();
+    const pixXUnidad = new Punto(
       brd.canvasWidth / (xmax - xmin),
-      brd.canvasHeight / ymax - ymin
+      brd.canvasHeight / (ymax - ymin)
     );
     const escala = new Punto(pto.x / pixXUnidad.x, -pto.y / pixXUnidad.y);
     return new Punto(escala.x + xmin, escala.y + ymax);
-  }
-  if (Array.isArray(pto)) {
-    return pto.map((p) => DesdePixeles(p, brd));
-  }
+}
+
+function DesdePixeles (ptos: Punto[] , brd: Board): Punto[] {
+  return (ptos).map((p: Punto) => DesdePixelesP(p, brd));
 };
 
-const xInicialGlider = (brd, func) => {
+const xInicialGlider = (brd: Board, func: GeomElem) => {
   const ptosInter = DesdePixeles([new Punto(0, 0), new Punto(30, 0)], brd);
   const seg = ptosInter[1].x - ptosInter[0].x;
   let vy;
-  let [xini, ymax, xmax, ymin] = brd.getBoundingBox();
-  let xmed = (xmax - xini) / 2;
+  const [xmin, ymax, xmax, ymin] = brd.getBoundingBox();
+  const xmed = (xmax - xmin) / 2;
+  let xini=xmin;
   do {
     xini += seg;
     vy = func.Y(xini);
@@ -148,14 +150,14 @@ const xInicialGlider = (brd, func) => {
   };
 };
 
-const AnimaRT = (brd, param) => {
-  let pg = param.idObjs[0];
-  let { xini } = xInicialGlider(brd, param.func);
-  let xfin = param.vxmax;
-  let inicio = null;
-  let incr = (xfin - xini) / 300;
+const AnimaRT = (brd: Board, param: paramD) => {
+  const pg = param.idObjs[0];
+  const { xini } = xInicialGlider(brd, param.func);
+  const xfin = param.vxmax;
+  let inicio: number;
+  const incr = (xfin - xini) / 300;
   //pg.setGliderPosition(xini);
-  function animaGlider(timestamp) {
+  function animaGlider(timestamp: number) {
     if (!inicio) {
       inicio = timestamp;
     }
@@ -173,10 +175,10 @@ const AnimaRT = (brd, param) => {
   animaTangId.update(() => requestAnimationFrame(animaGlider));
 };
 
-const MuestraRT = (brd, param) => {
-  let objCreados = [];
-  let { xini, seg } = xInicialGlider(brd, param.func);
-  let pg = brd.create("glider", [xini, param.func.Y(xini), param.func], {
+const MuestraRT = (brd: Board, param: paramD) => {
+  const objCreados = [];
+  const { xini, seg } = xInicialGlider(brd, param.func);
+  const pg = brd.create("glider", [xini, param.func.Y(xini), param.func], {
     name: "",
     size: 3,
     fillColor: param.color,
@@ -184,7 +186,7 @@ const MuestraRT = (brd, param) => {
     face: "[]",
   });
   const df = param.deriv;
-  const rt = (x) => df(pg.X()) * (x - pg.X()) + pg.Y();
+  const rt = (x: number) => df(pg.X()) * (x - pg.X()) + pg.Y();
   const pga = brd.create(
     "point",
     [() => pg.X() - seg, () => rt(pg.X() - seg)],

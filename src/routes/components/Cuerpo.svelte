@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import {
 		brd,
 		funRac,
@@ -27,6 +27,53 @@
 		AnimaRT
 	} from '../tools/TrazosJSXGraph';
 	import { items } from '../tools/datosItems';
+	import type { Polinomio, FunRacional } from '../tools/Polinomio';
+	import type {paramF, paramD, GeomElem, funTipo} from '../tools/tipos';
+
+	interface cadyLatex {
+		expr: string;
+		latex: string;
+	}
+
+	interface raicesFun {
+		rfun: number[];
+		rder1: number[];
+		rder2: number[];
+	}
+
+	interface dataSym {
+		racional: string;
+		polinomio?: cadyLatex;
+		polNum?: cadyLatex;
+		polDen?: cadyLatex;
+		derivada: cadyLatex;
+		derivada2: cadyLatex;
+		raices: {
+			rfun: string;
+			rder1: string;
+			rder2: string;
+		};
+		polos?: string;
+		remov?: string;
+		polosRaicesyDer?: string; 
+		ventanaX: string;
+		error?: string;
+	}
+
+	interface dataEnJs {
+		racional: boolean;
+		polinomio?: cadyLatex;
+		polNum?: cadyLatex;
+		polDen?: cadyLatex;
+		derivada: cadyLatex;
+		derivada2: cadyLatex;
+		raices: raicesFun;
+		polos?: number[];
+		remov?: number[];
+		polosRaicesyDer?: number[]; 
+		ventanaX: number[];
+		ventanaY?: number[];
+	}
 
 	let latex = '\\frac{x^3-3x+1}{x^2-4}';
 	let msg = '';
@@ -34,7 +81,16 @@
 
 	muestra.subscribe((valor) => (disabled = valor));
 
-	let datosSympy = {};
+	let datosSympy: dataEnJs= {
+		racional: false,
+		derivada: {expr: "", latex: "",},
+		derivada2: { expr: "", latex: "",},
+		raices: { rfun: new Array<number>,
+							rder1: new Array<number>,
+							rder2: new Array<number>,
+						},	 
+		ventanaX: new Array<number>,
+	};
 
 	let open = false;
 	let boardAttributes = {
@@ -44,16 +100,14 @@
 
 	let jxgCajaId='cajaInicio';
 
-	//brd.set(null);
-
-	let paramFunc = {
-		func: null,
-		name: '',
-		color: '',
-		raices: [],
+	let paramFunc: paramF= {
+		func: (x) => 0, // 
+		name: "",
+		color: "",
+		raices: new Array<number>,
 		traza: false,
-		idFuns: [],
-		idRaices: []
+		idFuns: new Array<number>,
+		idRaices: new Array<GeomElem>,
 	};
 
 	onDestroy( () => {
@@ -81,7 +135,7 @@
 		}
 	};
 
-	const ChecaHuecos = (cad) => {
+	const ChecaHuecos = (cad: string) => {
 		let reg = /\*\*\(\)/g;
 		if (cad.match(reg) !== null) {
 			return 'Hay una casilla de exponente vacia';
@@ -122,16 +176,20 @@
 			msg = InfijaAPolacaFR.errores[-procesaInfija.numError];
 			return false;
 		}
-		let variables= procesaInfija.variables;
-		let funrac2= InfijaAPolacaFR.EvalFuncRac(procesaInfija.postFija, variables);
-		if (funrac2 !== undefined) {
-			funRac.set(funrac2);
+		funRac.set(InfijaAPolacaFR.EvalFuncRac(procesaInfija.postFija,
+		 procesaInfija.variables));
+		 
+		if ($funRac === undefined) {
+			open=!open;
+			msg=InfijaAPolacaFR.errores[- InfijaAPolacaFR.nErr];
+			return false;
 		}
-		funRac.set(InfijaAPolacaFR.EvalFuncRac(procesaInfija.postFija));
 		if ($funRac.esPolinomio) {
 			cadFunRac = $funRac.toString();
-		} else {
-			cadFunRac = $funRac.numP.toString() + ',' + $funRac.denomP.toString();
+		}
+		else {
+			cadFunRac = ($funRac as FunRacional).numP.toString() + ',' +
+			($funRac as FunRacional).denomP.toString();
 		}
 		const url = 'http://127.0.0.1:5000/api/v1/polynomial/properties/' + cadFunRac;
 		const respPromesa = fetch(url, { method: 'GET', mode: 'cors' });
@@ -140,34 +198,40 @@
 				throw new Error(`HTTP error! Status: ${response.status}`);
 				return false;
 			}
-			response.json().then((data) => {
-				data.racional = cadBul(data.racional);
-				data.rfun = ArrNum(data.raices.rfun);
-				data.rder1 = ArrNum(data.raices.rder1);
-				data.rder2 = ArrNum(data.raices.rder2);
-				if (data.racional) {
-					data.remov = ArrNum(data.remov);
+			response.json().then((data: dataSym) => {
+				datosSympy.racional = cadBul(data.racional);
+				datosSympy.raices.rfun = ArrNum(data.raices.rfun);
+				datosSympy.raices.rder1 = ArrNum(data.raices.rder1);
+				datosSympy.raices.rder2 = ArrNum(data.raices.rder2);
+				datosSympy.derivada=data.derivada;
+				datosSympy.derivada2=data.derivada2;
+				if (datosSympy.racional) {
+					datosSympy.polNum= data.polNum;
+					datosSympy.polDen= data.polDen;
+					datosSympy.polos=ArrNum(data.polos);
+					datosSympy.remov = ArrNum(data.remov);
 				}
-				data.ventanaX = ArrNum(data.ventanaX);
-				console.log(data);
-				console.log(data.derivada.latex);
-				data.derivada.latex = "P'\\left(x\\right)=" + data.derivada.latex;
-				console.log(data.derivada.latex);
-				ventanaY = calcExtremos((x) => $funRac.Evalua(x), data.rder1);
+				datosSympy.ventanaX = ArrNum(data.ventanaX);
+				console.log(datosSympy);
+				console.log(datosSympy.derivada.latex);
+				datosSympy.derivada.latex = "P'\\left(x\\right)=" + datosSympy.derivada.latex;
+				console.log(datosSympy.derivada.latex);
+				ventanaY = calcExtremos((x: number) =>
+									 (<funTipo>$funRac).Evalua(x), datosSympy.raices.rder1);
 				boardAttributes = {
 					axis: true,
-					boundingbox: [data.ventanaX[0], ventanaY[1] * 1.1, data.ventanaX[1], ventanaY[0] * 1.1]
+					boundingbox: [datosSympy.ventanaX[0], ventanaY[1] * 1.1,
+					datosSympy.ventanaX[1], ventanaY[0] * 1.1]
 				};
-				paramFunc.func = (x) => $funRac.Evalua(x);
+				paramFunc.func = (x: number) => (<funTipo>$funRac).Evalua(x);
 				paramFunc.name = 'P';
 				paramFunc.color = 'green';
 				paramFunc.idFuns = $idFuns;
 				idFuns.set(GraficaNueva($brd, paramFunc));
-				datosSympy = data;
-				if (datosSympy.hasOwnProperty('rfun')) {
-					items[0].contenido = ArrNumToString(datosSympy.rfun, 3);
-					paramFunc.raices = datosSympy.rfun;
-					paramFunc.idRaices = [];
+				if (datosSympy.raices.hasOwnProperty('rfun')) {
+					items[0].contenido = ArrNumToString(datosSympy.raices.rfun, 3);
+					paramFunc.raices = datosSympy.raices.rfun;
+					paramFunc.idRaices = new Array<GeomElem>;
 				}
 				if (datosSympy.hasOwnProperty('derivada')) {
 					items[1].contenido = datosSympy.derivada.latex;
@@ -177,13 +241,13 @@
 		return true;
 	}
 
-	InfijaAPolaca.IniciaErrores();
+	InfijaAPolacaFR.IniciaErrores();
 
-	const ActualizaGraf = (item) => {
+	const ActualizaGraf = (item: number) => {
 		console.log(item);
-		if (item === 0 && datosSympy.hasOwnProperty('rfun')) {
+		if (item === 0 && datosSympy.raices.hasOwnProperty('rfun')) {
 			if (paramFunc.raices.length === 0) {
-				$idRaices = [];
+				$idRaices = new Array<GeomElem>;
 				return;
 			}
 			$idRaices = GraficaRaices($brd, paramFunc);
@@ -194,9 +258,9 @@
 	};
 
 	const animaRectaTang = () => {
-		let param = {
+		const param: paramD = {
 			func: $idFuns[0],
-			deriv: (x) => funRac.Derivada().Evalua(x),
+			deriv: (x: number) => (<funTipo>$funRac).Derivada().Evalua(x),
 			vxmin: datosSympy.ventanaX[0],
 			vxmax: datosSympy.ventanaX[1],
 			color: 'blue',
