@@ -25,7 +25,7 @@ beforeUpdate(() => {
   }
 });
 
-console.log("version jsxgraph:", JXG.version);
+//console.log("version jsxgraph:", JXG.version);
 
 //export {brd};
 </script>
