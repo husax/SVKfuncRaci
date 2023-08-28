@@ -4,6 +4,7 @@
 	import {brd} from '../tools/Almacen';
 	import ElegirPolin from './ElegirPolin.svelte';
 	import Tarjeta from './Tarjeta.svelte';
+	import TutorRaices from './TutorRaices.svelte';
 let boardAttributes = {
 		axis: true,
 		boundingbox: [-20, 10, 10, -15]
@@ -24,6 +25,7 @@ let textosTarj=[
 	]	
 ];
 let tutoriales= false;
+let isOpenTut=true;
 let accionTutor= (e: MouseEvent) => {
 	
 	//carga jsxgraph
@@ -41,17 +43,19 @@ let accionTutor= (e: MouseEvent) => {
 			Textos={textosTarj[0]} accion={accionTutor}/>
 		</Col>
 		<Col sm={4}>
-			<Tarjeta  {isOpen} Textos={textosTarj[1]} accion={accionTutor}/>
+			<Tarjeta  {isOpen} 
+			Textos={textosTarj[1]} accion={accionTutor}/>
 		</Col>
-		<!-- <Col sm={4}>
-			<ElegirPolin arrLatex={arrL}/>
-		</Col> -->
-		{#if tutoriales}
+	</Row>
+	{#if tutoriales}
+		<Row>
+			<Col sm={4}>
+				<TutorRaices isOpen={isOpenTut}/>
+			</Col>
 			<Col sm={8}>
 				<JXGBoard {boardAttributes} {jxgCajaId} />
 			</Col>
-		{/if}
-		
-	</Row>		
+		</Row>
+	{/if}	
 </Container>
 

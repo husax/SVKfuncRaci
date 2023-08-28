@@ -1,7 +1,11 @@
 import type JXG from './jsxgraphcore.mjs';
 import type { Polinomio, FunRacional } from './Polinomio';
+type Board= typeof JXG.Board;
 type GeomElem= typeof JXG.GeometryElement;
 type funTipo= FunRacional | Polinomio;
+type funR= (x:number) => number;
+type funReal= funR | undefined;
+
 
 interface OptMenu {
   href: string;
@@ -16,7 +20,7 @@ interface DatosHead {
 }
 
 interface paramF {
-  func: (x:number) => number;
+  func: funR;
   name: string;
   color: string;
   raices: number[];
@@ -34,4 +38,23 @@ interface paramD {
   idObjs: GeomElem[];
 }
 
-export type {OptMenu, DatosHead, paramF, paramD, GeomElem, funTipo}
+interface DeslPr {
+  id: string;
+  min: string;
+  max: string;
+  step: string;
+  value: string;
+}
+
+export type {
+  OptMenu,
+  DatosHead,
+  paramF,
+  paramD,
+  GeomElem,
+  Board,
+  funTipo,
+  DeslPr,
+  funR,
+  funReal,
+}

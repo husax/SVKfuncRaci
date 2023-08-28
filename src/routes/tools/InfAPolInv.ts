@@ -785,14 +785,14 @@ class InfijaAPolacaFR extends InfijaAPolaca {
   // su valor es el valor de la propiedad.
   // entrega una funcion polinomial, o una funcion racional según sea el caso
   // el número de error lo entrega en la propiedad numError
-  static EvalFuncRac(postFija: ParCadInt[], variables: DicVariables) 
-                      : funTipo | undefined {
+  static EvalFuncRac(postFija: ParCadInt[], variables: DicVariables,
+                      varP= "x" )  : funTipo | undefined {
     let numero;
     let oper1;
     let oper2;
     let par;
-    const nomvar = Object.keys(variables);
-    let variable = nomvar.length > 2 ? nomvar[2] : "";
+    //const nomvar = Object.keys(variables);
+    const variable = varP; // nomvar.length > 2 ? nomvar[2] : "";
     const pilaCalc: funTipo[] = [];
     let result: funTipo | undefined;
     postFija.forEach((pf: ParCadInt) => {
@@ -809,7 +809,7 @@ class InfijaAPolacaFR extends InfijaAPolaca {
               return undefined;
             }
             pilaCalc.push(result);
-;          }
+          }
           else {
             InfijaAPolaca.nErr = -20; // error: se perdio un operando
             return undefined;
@@ -845,17 +845,14 @@ class InfijaAPolacaFR extends InfijaAPolaca {
           }
           break;
         case 10: // número o variable
-          numero = parseFloat(par.cad);
-          if (Number.isNaN(numero)) {
-            // es una variable
-            if (variable === "") {
-              variable = par.cad;
-            } else if (variable !== par.cad) {
-              InfijaAPolaca.nErr = -30; // error: hay más de una variable en la expresión.
-              return undefined;
-            }
+          if (variable === par.cad) {
             pol = Polinomio.Monomio(1, 1, variable);
-          } else {
+          }
+          else {
+            numero = parseFloat(par.cad);
+            if (Number.isNaN(numero)) {  //es un parámetro
+              numero= variables[par.cad];
+            }
             pol = Polinomio.Monomio(numero, 0, variable);
           }
           pilaCalc.push(pol);

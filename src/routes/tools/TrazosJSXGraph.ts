@@ -1,8 +1,6 @@
 import { Punto } from "./vector";
 import { brd, idObjs, idFuns, animaTangId } from "./Almacen";
-import type JXG from './jsxgraphcore.mjs';
-import type { paramF, paramD, GeomElem } from "./tipos";
-type Board= typeof JXG.Board;
+import type { paramF, paramD, GeomElem, Board } from "./tipos";
 const GraficaNueva: (brd:Board, param: paramF) => GeomElem = (brd: Board , param: paramF) => {
   brd.suspendUpdate();
   BorraObjGraficos(brd, param);
