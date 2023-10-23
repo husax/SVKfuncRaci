@@ -17,9 +17,11 @@ let tarjeta: Tarjeta;
 let isOpen= true;
 let textosTarj=[
 	['Tutoriales de polinomios',
+	 '',
 	'Actividades guiadas sobre raices y conceptos del cálculo Diferencial.'
 	],
-	['Cálculo con polinomios', 
+	['Cálculo con polinomios',
+	 '', 
 	'Actividades para determinar cualidades graficas de los polinomios. ' +
   'Por ejemplo: monotonia, concavidad, extremos comportamiento al infinito'
 	]	
@@ -40,17 +42,24 @@ let accionTutor= (e: MouseEvent) => {
 	<Row>
 		<Col sm={4}>
 			<Tarjeta bind:this={tarjeta} {isOpen}
-			Textos={textosTarj[0]} accion={accionTutor}/>
+			textos={textosTarj[0]} >
+				<Button id="entrar" color={"success"} on:click={accionTutor}>
+					Entrar
+				</Button>
+			</Tarjeta>
 		</Col>
 		<Col sm={4}>
-			<Tarjeta  {isOpen} 
-			Textos={textosTarj[1]} accion={accionTutor}/>
+			<Tarjeta  {isOpen} textos={textosTarj[1]}>
+				<Button id="entrar" color={"success"} on:click={accionTutor}>
+					Entrar
+				</Button>
+			</Tarjeta>
 		</Col>
 	</Row>
 	{#if tutoriales}
 		<Row>
 			<Col sm={4}>
-				<TutorRaices isOpen={isOpenTut}/>
+				<TutorRaices/>
 			</Col>
 			<Col sm={8}>
 				<JXGBoard {boardAttributes} {jxgCajaId} />

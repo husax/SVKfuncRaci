@@ -16,11 +16,6 @@ import type {OptMenu, DatosHead} from "../tools/tipos";
 
 export let datosH: DatosHead;
 
-/* export let funcTipo: string="Algebraicas";
-export let tarea: string;
-export let titMnu: string;
-export let opcMnu: OptMenu[];
- */
 
 let hayTitMnu= datosH.titMnu !== "";
 

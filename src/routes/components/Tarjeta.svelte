@@ -11,8 +11,8 @@
   } from 'sveltestrap';
   import {onDestroy} from 'svelte';
   export let isOpen: boolean;
-  export let Textos: Array<string>;
-  export let accion: (e:MouseEvent) => void;
+  export let textos: Array<string>;
+  //export let accion: (e:MouseEvent) => void;
 
   onDestroy( () => {
   console.log("destruyó componente Tarjeta");
@@ -23,14 +23,17 @@
 <Fade {isOpen} >
   <Card class="mb-3" >
     <CardHeader>
-      <CardTitle>{Textos[0]}</CardTitle>
+      <CardTitle>{textos[0]}</CardTitle>
     </CardHeader>
     <CardBody>
-      <!-- <CardSubtitle>Gráfica</CardSubtitle> -->
+      <CardSubtitle>{textos[1]}</CardSubtitle>
       <CardText>
-        {Textos[1]}
+        <div>
+          {textos[2]}
+        </div>
+        <slot>
+        </slot>
       </CardText>
-      <Button id="entrar" color={"success"} on:click={accion} >Entrar</Button>
     </CardBody>
   </Card>
 </Fade>

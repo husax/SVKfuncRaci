@@ -18,15 +18,24 @@
 	import { InfijaAPolacaFR } from '../tools/InfAPolInv';
 	import { brd } from '../tools/Almacen';
 	import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
+	import Tarjeta from './Tarjeta.svelte';
   export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
-  export let isOpen: boolean;
+  //export let isOpen: boolean;
 
-  let textosTarj= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
+  let letraParam= "<strong><i>a</i></strong>"
+  let textosCont= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
                 +" Elige un tipo de polinomio.",
                 "Mueve el deslizador para observar cómo cambia el número"
                 + " de raices de: ",
-                "Cuando termines de explorar, oprime continuar para responder" 
-                + " algunas preguntas relacionadas con las raices."]
+                "Cuando termines de explorar, oprime Continuar para responder" 
+                + " algunas preguntas relacionadas con las raices.",
+                "Dame un valor para el parámetro "+ letraParam +
+                " donde se tengan 2 raices distintas. "+ letraParam + ": ",
+                "Ahora dame el mayor intervalo de valores de "+ letraParam + 
+                " donde se tengan 2 raices distintas."
+              ]
+  let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
+  let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ]
 
   let latex: string;
   const deslProps: DeslPr= {
@@ -41,6 +50,7 @@
   let fun: funR;
   let infpol: InfijaAPolacaFR;
   let f: GeomElem;
+  let IsopenSeq= [ true, false, false];
 
   let ActualizaGraf= (infpol: InfijaAPolacaFR, desl: DeslPr) => {
     infpol.variables[desl.id]=Number.parseFloat(desl.value);
@@ -50,11 +60,14 @@
   }
 
   let pF: paramF;
+  let resp1: string;
 
   const opcion= (e: MouseEvent) => {
     let ind= e.currentTarget.id;
     let cad=arrLatex[ind];
-    isOpen=false;
+    IsopenSeq[0]=false;
+    IsopenSeq[1]=true;
+    textosTarj[2]=textosCont[1];
     latex= cad;
     cad= cad.split('=')[1]; // lo que esta despues del igual
     cad= TeXToLinealPyt.insertaAster(cad);
@@ -83,63 +96,84 @@
     GraficaRaices($brd, pF);
   }
 
-function actualizaVal () {
-  deslProps.value= this.value;
-  infpol.variables[deslProps.id]=Number.parseFloat(deslProps.value);
-  let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
-  let coefs= new Array<number>;
-  if (funRac !== undefined) {
-    coefs= funRac.coefs;  
+  const contyPreg= (e: MouseEvent) => {
+    IsopenSeq[1]=false;
+    IsopenSeq[2]=true;
+    textosTarj[1]+=' de:';
+    textosTarj[2]='';
   }
-  pF.raices= Raices(coefs);
-  BorraObjGraficos($brd, pF);
-  pF.idFuns.push($brd.create('functiongraph', [fun]));
-  GraficaRaices($brd, pF);
-}
+
+  const sigue= (e: MouseEvent) => {
+    let r = Number.parseFloat(resp1)
+    if (0 < r && r < 2 ) {
+      console.log("Para ese valor hay dos raices");
+    }
+  }
+
+  function actualizaVal (e: Event): void {
+    deslProps.value= e.target.value;
+    infpol.variables[deslProps.id]=Number.parseFloat(deslProps.value);
+    let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
+    let coefs= new Array<number>;
+    if (funRac !== undefined) {
+      coefs= funRac.coefs;  
+    }
+    pF.raices= Raices(coefs);
+    BorraObjGraficos($brd, pF);
+    pF.idFuns.push($brd.create('functiongraph', [fun]));
+    GraficaRaices($brd, pF);
+  }
 
 </script>
 
-<Card class="mb-3">
-  <CardHeader>
-    <CardTitle>Raices</CardTitle>
-  </CardHeader>
-  <CardBody>
-    <CardSubtitle>Polinomios</CardSubtitle>
-    <CardText>
-       
-      <Fade {isOpen}>
-        {textosTarj[0]}
-        <ListGroup>
-          {#each arrLatex as latex, ind }
-            <ListGroupItem tag="button" id={ind.toString()} on:click={opcion} >
-              <MathQuillStatic {latex} />
-            </ListGroupItem>          
-          {/each}
-          <ListGroupItem tag="button" href="#" action >
-            Otro Polinomio
-          </ListGroupItem>
-        </ListGroup>
-      </Fade>
-      <Fade isOpen={!isOpen} >
-        <div class="mezcla">
-          {textosTarj[1]}
-          <MathQuillStatic {latex}/>
-        </div>  
-        <Deslizador {deslProps} {infpol} {actualizaVal}/>
-        <CardText>
-          {textosTarj[2]}
-        </CardText>
-        <Button color="success">Continuar</Button>
-      </Fade>
-    </CardText>
-    
-  </CardBody>
-</Card>
+<Tarjeta isOpen={IsopenSeq[0]} textos={textosTarj}>
+  <ListGroup>
+    {#each arrLatex as latex, ind }
+      <ListGroupItem tag="button" id={ind.toString()} on:click={opcion} >
+        <MathQuillStatic {latex} />
+      </ListGroupItem>          
+    {/each}
+    <ListGroupItem tag="button" href="#" action >
+      Otro Polinomio
+    </ListGroupItem>
+  </ListGroup>
+</Tarjeta>
+<Tarjeta isOpen={IsopenSeq[1]} textos={textosTarj}>
+  <div class="centra">
+    <MathQuillStatic {latex}/>
+  </div>  
+  <Deslizador {deslProps} {infpol} {actualizaVal}/>
+    {textosCont[2]}
+  <Button color="success" on:click={contyPreg}>Continuar</Button>
+</Tarjeta>
+<Tarjeta isOpen={IsopenSeq[2]} textos={textosTarj}>
+  <div class="centra">
+    <MathQuillStatic {latex}/>
+  </div>
+  <Deslizador {deslProps} {infpol} {actualizaVal}/>
+    <label for="numraices">{@html textosCont[3]}
+      <input id="numraices" type="number"
+        min={deslProps.min} max={deslProps.max} 
+        step={deslProps.step}
+        bind:value={resp1}
+      />
+    </label> 
+    <div class="separa">
+      <Button color="success" on:click={sigue}>Siguiente</Button>
+    </div>
+</Tarjeta>
 
 <style>
-  .mezcla {
-    line-height: 1.6;
+  .centra {
+    line-height: 2;
     display: inline-block;
-    margin-left: 10px;
+    margin-left: 40px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .separa {
+    margin-top: 1rem;
+    display:flex;
+    justify-content: end;
   }
 </style>

@@ -6,7 +6,7 @@ import { Raices } from '../tools/TrazosPolinJSX';
 import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
 export let deslProps: DeslPr;
 export let infpol: InfijaAPolacaFR;
-export let actualizaVal;
+export let actualizaVal: (e: Event) => void;
 let f: GeomElem;
 let fun: funR= (x: number) => {
         infpol.variables["x"]=x;
@@ -21,18 +21,18 @@ $: etiq= deslProps.id+"="+deslProps.value;
 </script>
 
 
-  <label for={deslProps.id}>
-    <input class="entrada"
-      type="range" 
-      id= {deslProps.id}
-      min={deslProps.min}
-      max={deslProps.max}
-      step={deslProps.step}
-      value={deslProps.value}
-      on:input={actualizaVal}
-    />
-    {etiq}
-  </label>
+<label for={deslProps.id}>
+  <input class="entrada"
+    type="range" 
+    id= {deslProps.id}
+    min={deslProps.min}
+    max={deslProps.max}
+    step={deslProps.step}
+    value={deslProps.value}
+    on:input={actualizaVal}
+  />
+  {etiq}
+</label>
 
 <style>
   .entrada {
