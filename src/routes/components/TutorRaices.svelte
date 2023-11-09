@@ -29,8 +29,8 @@
                 + " de raices de: ",
                 "Cuando termines de explorar, oprime Continuar para responder" 
                 + " algunas preguntas relacionadas con las raices.",
-                "Dame un valor para el parámetro "+ letraParam +
-                " donde se tengan 2 raices distintas. "+ letraParam + ": ",
+                "Escribe o elige un valor para el parámetro "+ letraParam +
+                " donde se tengan 2 raices distintas. "+ letraParam + "= ",
                 "Ahora dame el mayor intervalo de valores de "+ letraParam + 
                 " donde se tengan 2 raices distintas."
               ]
@@ -38,7 +38,7 @@
   let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ]
 
   let latex: string;
-  const deslProps: DeslPr= {
+  let deslProps: DeslPr= {
     id: "a",
     min: "-5",
     max: "5",
@@ -107,11 +107,14 @@
     let r = Number.parseFloat(resp1)
     if (0 < r && r < 2 ) {
       console.log("Para ese valor hay dos raices");
+      deslProps.value=resp1;
+      deslProps= deslProps;
     }
   }
 
   function actualizaVal (e: Event): void {
     deslProps.value= e.target.value;
+    resp1=deslProps.value;
     infpol.variables[deslProps.id]=Number.parseFloat(deslProps.value);
     let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
     let coefs= new Array<number>;
@@ -142,20 +145,21 @@
   <div class="centra">
     <MathQuillStatic {latex}/>
   </div>  
-  <Deslizador {deslProps} {infpol} {actualizaVal}/>
+  <Deslizador valor={deslProps.value} {deslProps} {actualizaVal}/>
     {textosCont[2]}
-  <Button color="success" on:click={contyPreg}>Continuar</Button>
+  <Button class="separa" color="success" on:click={contyPreg}>Continuar</Button>
 </Tarjeta>
 <Tarjeta isOpen={IsopenSeq[2]} textos={textosTarj}>
   <div class="centra">
     <MathQuillStatic {latex}/>
   </div>
-  <Deslizador {deslProps} {infpol} {actualizaVal}/>
+  <Deslizador valor={resp1} {deslProps} {actualizaVal}/>
     <label for="numraices">{@html textosCont[3]}
       <input id="numraices" type="number"
         min={deslProps.min} max={deslProps.max} 
         step={deslProps.step}
         bind:value={resp1}
+        on:input={actualizaVal}
       />
     </label> 
     <div class="separa">

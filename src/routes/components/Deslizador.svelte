@@ -1,19 +1,13 @@
 <script lang="ts">
-import type { DeslPr, GeomElem, funR, paramF } from "../tools/tipos";
-import { InfijaAPolacaFR } from "../tools/InfAPolInv";
-import { brd } from '../tools/Almacen';
-import { Raices } from '../tools/TrazosPolinJSX';
-import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
+import type { DeslPr } from "../tools/tipos";
+//import { brd } from '../tools/Almacen';
+//import { Raices } from '../tools/TrazosPolinJSX';
+//import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
+export let valor: string;
 export let deslProps: DeslPr;
-export let infpol: InfijaAPolacaFR;
 export let actualizaVal: (e: Event) => void;
-let f: GeomElem;
-let fun: funR= (x: number) => {
-        infpol.variables["x"]=x;
-        return InfijaAPolacaFR.Eval(infpol.postFija, infpol.variables);
-      };
 
-$: etiq= deslProps.id+"="+deslProps.value;
+$: etiq= deslProps.id+"="+valor;
 
 
 
@@ -28,7 +22,7 @@ $: etiq= deslProps.id+"="+deslProps.value;
     min={deslProps.min}
     max={deslProps.max}
     step={deslProps.step}
-    value={deslProps.value}
+    value={valor}
     on:input={actualizaVal}
   />
   {etiq}
