@@ -22,7 +22,17 @@
   export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   //export let isOpen: boolean;
 
-  let letraParam= "<strong><i>a</i></strong>"
+
+  let latex: string;
+  let deslProps: DeslPr= {
+    id: "a",
+    min: "-5",
+    max: "5",
+    step:".1",
+    value: "-2",
+  }
+
+  let letraParam= `<strong><i>${deslProps.id}</i></strong>`
   let textosCont= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
                 +" Elige un tipo de polinomio.",
                 "Mueve el deslizador para observar cómo cambia el número"
@@ -33,18 +43,9 @@
                 " donde se tengan 2 raices distintas. "+ letraParam + "= ",
                 "Ahora dame el mayor intervalo de valores de "+ letraParam + 
                 " donde se tengan 2 raices distintas."
-              ]
+              ];
   let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
-  let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ]
-
-  let latex: string;
-  let deslProps: DeslPr= {
-    id: "a",
-    min: "-5",
-    max: "5",
-    step:".1",
-    value: "-2",
-  }
+  let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ];
 
   
   let fun: funR;
@@ -60,7 +61,7 @@
   }
 
   let pF: paramF;
-  let resp1: string;
+  let resp1="2";
 
   const opcion= (e: MouseEvent) => {
     let ind= e.currentTarget.id;
@@ -72,6 +73,7 @@
     cad= cad.split('=')[1]; // lo que esta despues del igual
     cad= TeXToLinealPyt.insertaAster(cad);
     deslProps.id= ind === "0"? "a" : "b";
+    letraParam= `<strong><i>${deslProps.id}</i></strong>`
     infpol=ConstruyeFunParFijo(cad, deslProps);
     let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
     let coefs= new Array<number>;
