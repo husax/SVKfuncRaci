@@ -258,6 +258,12 @@ class FunRacional extends Polinomio {
   }
 
   Evalua(x: number): number {
+    /* if (this.numP.Evalua(x) === 0 && this.denomP.Evalua(x) === 0) {
+      const divComun= new Polinomio([-x, 1]);
+      const num= this.numP.Cociente(divComun);
+      const denom= this.denomP.Cociente(divComun);
+      return new FunRacional(num, denom).Evalua(x);
+    } */
     return this.numP.Evalua(x) / this.denomP.Evalua(x);
   }
   toString() {

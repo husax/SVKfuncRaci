@@ -4,6 +4,9 @@ import type { paramF, paramD, GeomElem, Board } from "./tipos";
 const GraficaNueva: (brd:Board, param: paramF) => GeomElem = (brd: Board , param: paramF) => {
   brd.suspendUpdate();
   BorraObjGraficos(brd, param);
+  console.log(param.func(1));
+  //console.log(param.func(4));
+  //console.log(param.func(-2));
   const fun1 = brd.create("functiongraph", [param.func], {
     strokewidth: 2,
     name: param.name,

@@ -1,13 +1,6 @@
 <script lang="ts">
   import {
     Button,
-    Card,
-    CardBody,
-    CardFooter,
-    CardHeader,
-    CardSubtitle,
-    CardText,
-    CardTitle
   } from 'sveltestrap';
   import { ListGroup, ListGroupItem, Fade } from 'sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
@@ -19,6 +12,7 @@
 	import { brd } from '../tools/Almacen';
 	import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
 	import Tarjeta from './Tarjeta.svelte';
+	import MsgModal from './MsgModal.svelte';
   export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   //export let isOpen: boolean;
 
@@ -32,17 +26,17 @@
     value: "-2",
   }
 
-  let letraParam= `<strong><i>${deslProps.id}</i></strong>`
+
   let textosCont= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
                 +" Elige un tipo de polinomio.",
                 "Mueve el deslizador para observar cómo cambia el número"
                 + " de raices de: ",
                 "Cuando termines de explorar, oprime Continuar para responder" 
                 + " algunas preguntas relacionadas con las raices.",
-                "Escribe o elige un valor para el parámetro "+ letraParam +
-                " donde se tengan 2 raices distintas. "+ letraParam + "= ",
-                "Ahora dame el mayor intervalo de valores de "+ letraParam + 
-                " donde se tengan 2 raices distintas."
+                "Escribe o elige un valor para el parámetro @a " +
+                "donde se tengan @n raices distintas. @a = ",
+                "Ahora dame el mayor intervalo de valores de @a" + 
+                " donde se tengan @n raices distintas."
               ];
   let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
   let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ];
@@ -51,7 +45,7 @@
   let fun: funR;
   let infpol: InfijaAPolacaFR;
   let f: GeomElem;
-  let IsopenSeq= [ true, false, false];
+  let IsopenSeq= [ true, false, false, false];
 
   let ActualizaGraf= (infpol: InfijaAPolacaFR, desl: DeslPr) => {
     infpol.variables[desl.id]=Number.parseFloat(desl.value);
@@ -62,6 +56,9 @@
 
   let pF: paramF;
   let resp1="2";
+  let mensaje="";
+  let headMsg="";
+  let bgColor="";
 
   const opcion= (e: MouseEvent) => {
     let ind= e.currentTarget.id;
@@ -73,7 +70,7 @@
     cad= cad.split('=')[1]; // lo que esta despues del igual
     cad= TeXToLinealPyt.insertaAster(cad);
     deslProps.id= ind === "0"? "a" : "b";
-    letraParam= `<strong><i>${deslProps.id}</i></strong>`
+    //letraParam= `<strong><i>${deslProps.id}</i></strong>`
     infpol=ConstruyeFunParFijo(cad, deslProps);
     let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
     let coefs= new Array<number>;
@@ -101,16 +98,42 @@
   const contyPreg= (e: MouseEvent) => {
     IsopenSeq[1]=false;
     IsopenSeq[2]=true;
-    textosTarj[1]+=' de:';
+    textosTarj[1]+=' de:';  
     textosTarj[2]='';
+    const nomParam= "<strong><i>" +  deslProps.id + "</i></strong>";
+    const numRaices= deslProps.id === "a" ? "2" : "3"; 
+    textosCont[3]=textosCont[3].replaceAll("@a", nomParam);
+    textosCont[3]=textosCont[3].replaceAll("@n", numRaices);
   }
 
-  const sigue= (e: MouseEvent) => {
+  const evalyPreg= (e: MouseEvent) => {
     let r = Number.parseFloat(resp1)
-    if (0 < r && r < 2 ) {
-      console.log("Para ese valor hay dos raices");
+    const dosRaices= deslProps.id === "a" ? true : false;
+    if (dosRaices) {
+      if (-5 < r && r < 4 ) {
+        mensaje="¡Efectivamente! Para ese valor del parámetro hay dos raices.";
+        headMsg="Respuesta Correcta";
+        bgColor="bg-success";
+      } else {
+        if (r=== 4) {
+          mensaje="En este caso hay una sola raíz aunque es doble. Inténtalo de nuevo";
+          headMsg="Revisa la pregunta";
+          bgColor="bg-warning";
+        } else {
+          mensaje="Para este valor del parámetro no hay raices. Inténtalo de nuevo.";
+          headMsg="Observa bien la Gráfica";
+          bgColor="bg-danger";
+        }
+      }
       deslProps.value=resp1;
       deslProps= deslProps;
+      IsopenSeq[3]=true;
+    } else {
+      if (-2 < r && r < 2 ) {
+        console.log("Efectivamente para ese valor hay tres raices");
+        deslProps.value=resp1;
+        deslProps= deslProps;
+      }  
     }
   }
 
@@ -156,7 +179,8 @@
     <MathQuillStatic {latex}/>
   </div>
   <Deslizador valor={resp1} {deslProps} {actualizaVal}/>
-    <label for="numraices">{@html textosCont[3]}
+    <label for="numraices">
+      {@html textosCont[3]}
       <input id="numraices" type="number"
         min={deslProps.min} max={deslProps.max} 
         step={deslProps.step}
@@ -165,9 +189,10 @@
       />
     </label> 
     <div class="separa">
-      <Button color="success" on:click={sigue}>Siguiente</Button>
+      <Button color="success" on:click={evalyPreg}>Siguiente</Button>
     </div>
 </Tarjeta>
+<MsgModal isOpen={IsopenSeq[3]} headMsg={headMsg} msg={mensaje} {bgColor}/>
 
 <style>
   .centra {

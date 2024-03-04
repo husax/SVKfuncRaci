@@ -77,6 +77,8 @@
 
 	let latex = '\\frac{x^3-3x+1}{x^2-4}';
 	let msg = '';
+	let headMsg="";
+	let bgColor="bg-danger"
 	let disabled;
 
 	muestra.subscribe((valor) => (disabled = valor));
@@ -165,6 +167,7 @@
 		let ventanaY;
 		msg = ChecaHuecos(cadpyt);
 		if (msg !== '') {
+			headMsg="Expresión inválida";
 			open = !open;
 			disabled = true;
 			return false;
@@ -173,6 +176,7 @@
 		procesaInfija.InfAPol();
 		if (procesaInfija.numError !== 0) {
 			open = !open;
+			headMsg="Expresión inválida";
 			msg = InfijaAPolacaFR.errores[-procesaInfija.numError];
 			return false;
 		}
@@ -181,6 +185,7 @@
 		 
 		if ($funRac === undefined) {
 			open=!open;
+			headMsg="Expresión inválida";
 			msg=InfijaAPolacaFR.errores[- InfijaAPolacaFR.nErr];
 			return false;
 		}
@@ -270,7 +275,7 @@
 	};
 </script>
 
-<MsgModal {open} {msg} on:cierra={toggle} />
+<MsgModal isOpen={open} {headMsg} {msg} on:cierra={toggle} {bgColor}/>
 <Container fluid>
 	<Row>
 		<Col sm={4}>
