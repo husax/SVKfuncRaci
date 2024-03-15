@@ -28,7 +28,7 @@
         }}
       >
         <h4 class="m-0" slot="header">{item.titulo}</h4>
-        {#if ind === 1}
+        {#if ind === 4}
           <CajaDeriv 
             latex={item.contenido}
             {animaRectaTang}

@@ -238,9 +238,13 @@
 					paramFunc.raices = datosSympy.raices.rfun;
 					paramFunc.idRaices = new Array<GeomElem>;
 				}
-				if (datosSympy.hasOwnProperty('derivada')) {
-					items[1].contenido = datosSympy.derivada.latex;
+				if (datosSympy.hasOwnProperty('polos')) {
+					items[1].contenido = ArrNumToString(datosSympy.polos, 3);
 				}
+				if (datosSympy.hasOwnProperty('derivada')) {
+					items[4].contenido = datosSympy.derivada.latex;
+				}
+ 
 			});
 		});
 		return true;
