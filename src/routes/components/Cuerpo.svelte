@@ -68,7 +68,7 @@
 		derivada: cadyLatex;
 		derivada2: cadyLatex;
 		raices: raicesFun;
-		polos?: number[];
+		polos: number[];
 		remov?: number[];
 		polosRaicesyDer?: number[]; 
 		ventanaX: number[];
@@ -90,7 +90,8 @@
 		raices: { rfun: new Array<number>,
 							rder1: new Array<number>,
 							rder2: new Array<number>,
-						},	 
+						},
+		polos: new Array<number>,					 
 		ventanaX: new Array<number>,
 	};
 
@@ -111,6 +112,9 @@
 		idFuns: new Array<number>,
 		idRaices: new Array<GeomElem>,
 	};
+
+	const textoRaices= ['r', 'No tiene raices reales.'];
+	const textoPolos= ['p', 'No tiene polos.'];
 
 	onDestroy( () => {
   	console.log("destruyó componente Cuerpo");
@@ -234,12 +238,12 @@
 				paramFunc.idFuns = $idFuns;
 				idFuns.set(GraficaNueva($brd, paramFunc));
 				if (datosSympy.raices.hasOwnProperty('rfun')) {
-					items[0].contenido = ArrNumToString(datosSympy.raices.rfun, 3);
+					items[0].contenido = ArrNumToString(datosSympy.raices.rfun, 3, textoRaices);
 					paramFunc.raices = datosSympy.raices.rfun;
 					paramFunc.idRaices = new Array<GeomElem>;
 				}
 				if (datosSympy.hasOwnProperty('polos')) {
-					items[1].contenido = ArrNumToString(datosSympy.polos, 3);
+					items[1].contenido = ArrNumToString(datosSympy.polos, 3, textoPolos);
 				}
 				if (datosSympy.hasOwnProperty('derivada')) {
 					items[4].contenido = datosSympy.derivada.latex;

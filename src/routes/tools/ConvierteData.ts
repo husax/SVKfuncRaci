@@ -25,14 +25,16 @@ function calcExtremos(f: (x: number) => number, arr: number[]): number[] {
   extr[1] = extr[1] < 10 ? 10 : extr[1];
   return extr;
 }
-function ArrNumToString(arr: number[], dig:number) {
+function ArrNumToString(arr: number[], dig:number, textos: string[]) {
   let cad = " ";
   if (arr.length > 0) {
     for (let i = 0; i < arr.length; i++) {
-      cad += `r<sub>${i + 1}</sub>= ${arr[i].toFixed(dig)}, `;
+      cad += `${textos[0]}<sub>${i + 1}</sub>= ${arr[i].toFixed(dig)}, `;
+      //cad += `r<sub>${i + 1}</sub>= ${arr[i].toFixed(dig)}, `;
     }
     return cad.slice(0, cad.length - 2);
   }
-  return "No tiene raices reales."
+  return textos[1];
+  //return "No tiene raices reales."
 }
 export { ArrNum, ArrNumToString, cadBul, calcExtremos };
