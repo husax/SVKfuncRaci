@@ -3,8 +3,8 @@
   import Cuerpo from "./components/Cuerpo.svelte";
 	import { MathQuillSetup } from "svelte-mathquill";
 	import JSXSetup from "./components/JSXSetup.svelte";
-  import { Styles } from "sveltestrap";
-	import type {OptMenu, DatosHead} from "./tools/tipos";
+  import { Styles } from "@sveltestrap/sveltestrap";
+	import type { DatosHead } from "./tools/tipos";
 	let datosH: DatosHead= {
 		funcTipo: "Racionales",
 		tarea: "",

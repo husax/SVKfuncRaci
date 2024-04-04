@@ -9,7 +9,7 @@
 		idFuns,
 		animaTangId,
 	} from '../tools/Almacen';
-	import { Col, Container, Row, Button } from 'sveltestrap';
+	import { Col, Container, Row, Button } from '@sveltestrap/sveltestrap';
 	import { onDestroy} from 'svelte';
 	import CajaMath from './CajaMath.svelte';
 	import MsgModal from './MsgModal.svelte';

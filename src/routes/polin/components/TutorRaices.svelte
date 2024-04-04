@@ -1,18 +1,18 @@
 <script lang="ts">
+	import TarjetaRaicesSelecFun from './TarjetaRaicesSelecFun.svelte';
   import {
     Button,
-  } from 'sveltestrap';
-  import { ListGroup, ListGroupItem, Fade } from 'sveltestrap';
+  } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
-	import Deslizador from './Deslizador.svelte';
-	import type { DeslPr, GeomElem, funR, paramF } from '../tools/tipos';
-	import { ConstruyeFunParFijo, Raices } from '../tools/TrazosPolinJSX';
-	import TeXToLinealPyt from '../tools/TeXToLineal';
-	import { InfijaAPolacaFR } from '../tools/InfAPolInv';
-	import { brd } from '../tools/Almacen';
-	import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
+	import Deslizador from '../../components/Deslizador.svelte';
+	import type { DeslPr, GeomElem, funR, paramF } from '../../tools/tipos';
+	import { ConstruyeFunParFijo, Raices } from '../../tools/TrazosPolinJSX';
+	import TeXToLinealPyt from '../../tools/TeXToLineal';
+	import { InfijaAPolacaFR } from '../../tools/InfAPolInv';
+	import { brd } from '../../tools/Almacen';
+	import { BorraObjGraficos, GraficaRaices } from '../../tools/TrazosJSXGraph';
 	import Tarjeta from './Tarjeta.svelte';
-	import MsgModal from './MsgModal.svelte';
+	import MsgModal from '../../components/MsgModal.svelte';
   export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   //export let isOpen: boolean;
 
@@ -28,13 +28,14 @@
 
 
   let textosCont= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
-                +" Elige un tipo de polinomio.",
+                + "<br> Elige un tipo de polinomio.",
                 "Mueve el deslizador para observar cómo cambia el número"
                 + " de raices de: ",
                 "Cuando termines de explorar, oprime Continuar para responder" 
                 + " algunas preguntas relacionadas con las raices.",
-                "Escribe o elige un valor para el parámetro @a " +
-                "donde se tengan @n raices distintas. @a = ",
+                "1. Escribe un valor para el parámetro @a " +
+                "donde se tengan @n raices distintas. @a = " + 
+                "2. Escribe un valor donde haya una raíz doble",
                 "Ahora dame el mayor intervalo de valores de @a" + 
                 " donde se tengan @n raices distintas."
               ];
@@ -70,7 +71,6 @@
     cad= cad.split('=')[1]; // lo que esta despues del igual
     cad= TeXToLinealPyt.insertaAster(cad);
     deslProps.id= ind === "0"? "a" : "b";
-    //letraParam= `<strong><i>${deslProps.id}</i></strong>`
     infpol=ConstruyeFunParFijo(cad, deslProps);
     let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
     let coefs= new Array<number>;
@@ -154,7 +154,7 @@
 
 </script>
 
-<Tarjeta isOpen={IsopenSeq[0]} textos={textosTarj}>
+<!-- <Tarjeta isOpen={IsopenSeq[0]} textos={textosTarj}>
   <ListGroup>
     {#each arrLatex as latex, ind }
       <ListGroupItem tag="button" id={ind.toString()} on:click={opcion} >
@@ -166,7 +166,10 @@
     </ListGroupItem>
   </ListGroup>
 </Tarjeta>
-<Tarjeta isOpen={IsopenSeq[1]} textos={textosTarj}>
+ -->
+ <TarjetaRaicesSelecFun isOpen={IsopenSeq[0]} textos={textosTarj} {opcion} />
+
+ <Tarjeta isOpen={IsopenSeq[1]} textos={textosTarj}>
   <div class="centra">
     <MathQuillStatic {latex}/>
   </div>  

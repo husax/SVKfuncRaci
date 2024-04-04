@@ -1,8 +1,5 @@
 <script lang="ts">
 import type { DeslPr } from "../tools/tipos";
-//import { brd } from '../tools/Almacen';
-//import { Raices } from '../tools/TrazosPolinJSX';
-//import { BorraObjGraficos, GraficaRaices } from '../tools/TrazosJSXGraph';
 export let valor: string;
 export let deslProps: DeslPr;
 export let actualizaVal: (e: Event) => void;

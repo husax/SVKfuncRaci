@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Accordion, AccordionItem } from "sveltestrap";
+  import { Accordion, AccordionItem } from "@sveltestrap/sveltestrap";
   import { onDestroy} from 'svelte';
   import { BorraRectaTang, BorraGrafDer } from "../tools/TrazosJSXGraph"; 
   import CajaDeriv from "./CajaDeriv.svelte";

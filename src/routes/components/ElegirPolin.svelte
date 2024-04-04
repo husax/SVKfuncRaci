@@ -8,8 +8,8 @@
     CardSubtitle,
     CardText,
     CardTitle
-  } from 'sveltestrap';
-  import { ListGroup, ListGroupItem } from 'sveltestrap';
+  } from '@sveltestrap/sveltestrap';
+  import { ListGroup, ListGroupItem } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
   export let arrLatex: string[];
 </script>

@@ -1,8 +1,6 @@
 <script lang="ts">
-	import { Col, Container, Row, Button } from 'sveltestrap';
-	import JXGBoard from './JsxBoard.svelte';
-	import {brd} from '../tools/Almacen';
-	import ElegirPolin from './ElegirPolin.svelte';
+	import { Col, Container, Row, Button } from '@sveltestrap/sveltestrap';
+	import JXGBoard from '../../components/JsxBoard.svelte';
 	import Tarjeta from './Tarjeta.svelte';
 	import TutorRaices from './TutorRaices.svelte';
 let boardAttributes = {

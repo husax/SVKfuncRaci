@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { onDestroy} from "svelte";
   import Cabeza from "../components/Cabeza.svelte";
-  import PolinCpo from "../components/PolinCpo.svelte";
-  import { Styles } from "sveltestrap";
+  import PolinCpo from "./components/PolinCpo.svelte";
+  import { Styles } from "@sveltestrap/sveltestrap";
   import { MathQuillSetup } from "svelte-mathquill";
 	import JSXSetup from "../components/JSXSetup.svelte";
   import type {OptMenu, DatosHead} from "../tools/tipos";

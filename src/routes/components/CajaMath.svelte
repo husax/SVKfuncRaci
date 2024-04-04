@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { InputGroup, InputGroupText, Button } from "sveltestrap";
+  import { InputGroup, InputGroupText, Button } from "@sveltestrap/sveltestrap";
   import { MathQuill, MathQuillStatic } from "svelte-mathquill";
   export let latex: string;
   export let disabled: boolean;

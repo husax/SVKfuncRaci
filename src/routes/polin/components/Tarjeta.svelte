@@ -8,7 +8,7 @@
     CardText,
     CardTitle,
     Fade,
-  } from 'sveltestrap';
+  } from '@sveltestrap/sveltestrap';
   import {onDestroy} from 'svelte';
   export let isOpen: boolean;
   export let textos: Array<string>;
@@ -29,7 +29,7 @@
       <CardSubtitle>{textos[1]}</CardSubtitle>
       <CardText>
         <div>
-          {textos[2]}
+          {@html textos[2]}
         </div>
         <slot>
         </slot>

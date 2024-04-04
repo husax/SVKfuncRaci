@@ -11,7 +11,7 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem
-} from 'sveltestrap';
+} from '@sveltestrap/sveltestrap';
 import type {OptMenu, DatosHead} from "../tools/tipos";
 
 export let datosH: DatosHead;

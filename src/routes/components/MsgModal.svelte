@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from 'sveltestrap';
+	import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@sveltestrap/sveltestrap';
 	import { createEventDispatcher } from 'svelte';
 
 	export let isOpen: boolean;

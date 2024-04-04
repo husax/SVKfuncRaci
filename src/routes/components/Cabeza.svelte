@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Col, Container, Image, Row } from "sveltestrap";
+  import { Col, Container, Image, Row } from "@sveltestrap/sveltestrap";
   import BarraNav from "./BarraNav.svelte";
   import type {OptMenu, DatosHead} from "../tools/tipos";
   let logoImg = "/logo.jpg";

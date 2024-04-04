@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, ListGroup, ListGroupItem } from "sveltestrap";
+  import { Button, ListGroup, ListGroupItem } from "@sveltestrap/sveltestrap";
   import { brd, funRac, idFuns, idObjs, animaTangId } from "../tools/Almacen";
   import {
     AgregaGrafica,
