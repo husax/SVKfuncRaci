@@ -16,3 +16,5 @@ export const idRaices = writable<GeomElem>();
 export const idObjs = writable([]);
 export const idFuns = writable([]);
 export const animaTangId = writable(0);
+export const resp1= writable([2,2,2]);
+export const resp2= writable(2);

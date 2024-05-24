@@ -1,7 +1,10 @@
 <script lang="ts">
+  import Tarjeta from './Tarjeta.svelte';
 	import TarjetaRaicesSelecFun from './TarjetaRaicesSelecFun.svelte';
+  import MsgModal from '../../components/MsgModal.svelte';
+	import TarjetaDeslizaPar from './TarjetaDeslizaPar.svelte';
   import {
-    Button,
+    Button
   } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
 	import Deslizador from '../../components/Deslizador.svelte';
@@ -9,10 +12,10 @@
 	import { ConstruyeFunParFijo, Raices } from '../../tools/TrazosPolinJSX';
 	import TeXToLinealPyt from '../../tools/TeXToLineal';
 	import { InfijaAPolacaFR } from '../../tools/InfAPolInv';
-	import { brd } from '../../tools/Almacen';
+	import { brd, resp1 } from '../../tools/Almacen';
 	import { BorraObjGraficos, GraficaRaices } from '../../tools/TrazosJSXGraph';
-	import Tarjeta from './Tarjeta.svelte';
-	import MsgModal from '../../components/MsgModal.svelte';
+	import TarjetaPreguntaRaices from './TarjetaPreguntaRaices.svelte';
+	
   export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   //export let isOpen: boolean;
 
@@ -33,20 +36,23 @@
                 + " de raices de: ",
                 "Cuando termines de explorar, oprime Continuar para responder" 
                 + " algunas preguntas relacionadas con las raices.",
-                "1. Escribe un valor para el parámetro @a " +
-                "donde se tengan @n raices distintas. @a = " + 
-                "2. Escribe un valor donde haya una raíz doble",
+                "Escribe un valor para el parámetro @a " +
+                "donde se tengan @n raices distintas. @a = ", 
+                "Escribe un valor para el parámetro @a" + 
+                " donde haya una raíz doble. @a = ",
+                "Escribe un valor para el parámetro @a" + 
+                " donde no tenga raices reales. @a = ",
                 "Ahora dame el mayor intervalo de valores de @a" + 
                 " donde se tengan @n raices distintas."
               ];
   let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
   let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ];
-
+  let textosMult: Array<string>;
   
   let fun: funR;
   let infpol: InfijaAPolacaFR;
   let f: GeomElem;
-  let IsopenSeq= [ true, false, false, false];
+  let IsOpenSeq= [ true, false, false, false];
 
   let ActualizaGraf= (infpol: InfijaAPolacaFR, desl: DeslPr) => {
     infpol.variables[desl.id]=Number.parseFloat(desl.value);
@@ -56,7 +62,7 @@
   }
 
   let pF: paramF;
-  let resp1="2";
+  //let resp1="2";
   let mensaje="";
   let headMsg="";
   let bgColor="";
@@ -64,8 +70,8 @@
   const opcion= (e: MouseEvent) => {
     let ind= e.currentTarget.id;
     let cad=arrLatex[ind];
-    IsopenSeq[0]=false;
-    IsopenSeq[1]=true;
+    IsOpenSeq[0]=false;
+    IsOpenSeq[1]=true;
     textosTarj[2]=textosCont[1];
     latex= cad;
     cad= cad.split('=')[1]; // lo que esta despues del igual
@@ -95,19 +101,23 @@
     GraficaRaices($brd, pF);
   }
 
-  const contyPreg= (e: MouseEvent) => {
-    IsopenSeq[1]=false;
-    IsopenSeq[2]=true;
+  const contyPreg= (e: Event): void => {
+    IsOpenSeq[1]=false;
+    IsOpenSeq[2]=true;
     textosTarj[1]+=' de:';  
     textosTarj[2]='';
     const nomParam= "<strong><i>" +  deslProps.id + "</i></strong>";
     const numRaices= deslProps.id === "a" ? "2" : "3"; 
     textosCont[3]=textosCont[3].replaceAll("@a", nomParam);
     textosCont[3]=textosCont[3].replaceAll("@n", numRaices);
+    textosCont[4]=textosCont[4].replaceAll("@a", nomParam);
+    textosCont[5]=textosCont[5].replaceAll("@a", nomParam);
+    textosMult= textosCont.slice(3, 6);
   }
 
-  const evalyPreg= (e: MouseEvent) => {
-    let r = Number.parseFloat(resp1)
+  const evalyPreg= (e: Event) => {
+    //let r = Number.parseFloat($resp1)
+    let r= $resp1[0];
     const dosRaices= deslProps.id === "a" ? true : false;
     if (dosRaices) {
       if (-5 < r && r < 4 ) {
@@ -125,13 +135,13 @@
           bgColor="bg-danger";
         }
       }
-      deslProps.value=resp1;
+      deslProps.value=$resp1[0].toString();
       deslProps= deslProps;
-      IsopenSeq[3]=true;
+      IsOpenSeq[3]=true;
     } else {
       if (-2 < r && r < 2 ) {
         console.log("Efectivamente para ese valor hay tres raices");
-        deslProps.value=resp1;
+        deslProps.value=$resp1.toString();
         deslProps= deslProps;
       }  
     }
@@ -139,7 +149,7 @@
 
   function actualizaVal (e: Event): void {
     deslProps.value= e.target.value;
-    resp1=deslProps.value;
+    //resp1=deslProps.value;
     infpol.variables[deslProps.id]=Number.parseFloat(deslProps.value);
     let funRac=InfijaAPolacaFR.EvalFuncRac(infpol.postFija, infpol.variables);
     let coefs= new Array<number>;
@@ -154,60 +164,10 @@
 
 </script>
 
-<!-- <Tarjeta isOpen={IsopenSeq[0]} textos={textosTarj}>
-  <ListGroup>
-    {#each arrLatex as latex, ind }
-      <ListGroupItem tag="button" id={ind.toString()} on:click={opcion} >
-        <MathQuillStatic {latex} />
-      </ListGroupItem>          
-    {/each}
-    <ListGroupItem tag="button" href="#" action >
-      Otro Polinomio
-    </ListGroupItem>
-  </ListGroup>
-</Tarjeta>
- -->
- <TarjetaRaicesSelecFun isOpen={IsopenSeq[0]} textos={textosTarj} {opcion} />
+  <TarjetaRaicesSelecFun isOpen={IsOpenSeq[0]} textos={textosTarj} {opcion} />
+  <TarjetaDeslizaPar isOpen={IsOpenSeq[1]} textos={textosTarj} otrosTextos={textosCont[2]}
+                    {latex} {deslProps} {actualizaVal} {contyPreg} />
+  <TarjetaPreguntaRaices isOpen={IsOpenSeq[2]} textos={textosTarj} otrosTextos={textosMult}
+                    {latex} {deslProps} {actualizaVal} />
 
- <Tarjeta isOpen={IsopenSeq[1]} textos={textosTarj}>
-  <div class="centra">
-    <MathQuillStatic {latex}/>
-  </div>  
-  <Deslizador valor={deslProps.value} {deslProps} {actualizaVal}/>
-    {textosCont[2]}
-  <Button class="separa" color="success" on:click={contyPreg}>Continuar</Button>
-</Tarjeta>
-<Tarjeta isOpen={IsopenSeq[2]} textos={textosTarj}>
-  <div class="centra">
-    <MathQuillStatic {latex}/>
-  </div>
-  <Deslizador valor={resp1} {deslProps} {actualizaVal}/>
-    <label for="numraices">
-      {@html textosCont[3]}
-      <input id="numraices" type="number"
-        min={deslProps.min} max={deslProps.max} 
-        step={deslProps.step}
-        bind:value={resp1}
-        on:input={actualizaVal}
-      />
-    </label> 
-    <div class="separa">
-      <Button color="success" on:click={evalyPreg}>Siguiente</Button>
-    </div>
-</Tarjeta>
-<MsgModal isOpen={IsopenSeq[3]} headMsg={headMsg} msg={mensaje} {bgColor}/>
-
-<style>
-  .centra {
-    line-height: 2;
-    display: inline-block;
-    margin-left: 40px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-  }
-  .separa {
-    margin-top: 1rem;
-    display:flex;
-    justify-content: end;
-  }
-</style>
+  <MsgModal isOpen={IsOpenSeq[3]} headMsg={headMsg} msg={mensaje} {bgColor}/>

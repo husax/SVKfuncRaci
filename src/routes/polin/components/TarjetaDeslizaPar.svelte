@@ -3,8 +3,18 @@
   import {Button } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
   import Deslizador from '../../components/Deslizador.svelte';
+  import type { DeslPr, funEvent } from '../../tools/tipos';
   export let isOpen: boolean;
   export let textos: Array<string>;
+  export let otrosTextos: string;
+  export let latex: string;
+  export let deslProps: DeslPr;
+  export let actualizaVal: funEvent;
+  export let contyPreg: funEvent;
+
+  //let resp1: string;
+  
+
 </script>
 
 <Tarjeta {isOpen} {textos}>
@@ -12,6 +22,26 @@
     <MathQuillStatic {latex}/>
   </div>  
   <Deslizador valor={deslProps.value} {deslProps} {actualizaVal}/>
-    {textosCont[2]}
-  <Button class="separa" color="success" on:click={contyPreg}>Continuar</Button>
+  <div class="separa">
+    {otrosTextos}
+  </div>
+  <div class="separa">
+    <Button outline color="success" on:click={contyPreg}>Continuar</Button>
+  </div>
 </Tarjeta>
+
+<style>
+  .centra {
+    line-height: 2;
+    display: inline-block;
+    margin-left: 40px;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+  .separa {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display:flex;
+    justify-content: end;
+  }
+</style>

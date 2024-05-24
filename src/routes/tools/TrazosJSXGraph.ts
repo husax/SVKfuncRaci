@@ -82,7 +82,7 @@ const BorraRectaTang = () => {
   });
   const unsuscribe = animaTangId.subscribe((id) => {
     window.cancelAnimationFrame(id);
-    console.log(id);
+    //console.log(id);
   });
 
   while (objs.length > 0) {

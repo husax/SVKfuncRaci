@@ -4,6 +4,7 @@ type Board= typeof JXG.Board;
 type GeomElem= typeof JXG.GeometryElement;
 type funTipo= FunRacional | Polinomio;
 type funR= (x:number) => number;
+type funEvent= (e: Event) => void;
 type funReal= funR | undefined;
 
 
@@ -57,4 +58,5 @@ export type {
   DeslPr,
   funR,
   funReal,
+  funEvent
 }

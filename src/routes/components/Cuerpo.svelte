@@ -257,7 +257,7 @@
 	InfijaAPolacaFR.IniciaErrores();
 
 	const ActualizaGraf = (item: number) => {
-		console.log(item);
+		//console.log(item);
 		if (item === 0 && datosSympy.raices.hasOwnProperty('rfun')) {
 			if (paramFunc.raices.length === 0) {
 				$idRaices = new Array<GeomElem>;
