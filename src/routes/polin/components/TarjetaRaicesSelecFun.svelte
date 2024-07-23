@@ -4,7 +4,7 @@
   import { MathQuillStatic } from "svelte-mathquill";
   export let isOpen: boolean;
   export let textos: Array<string>;
-  export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
+  export let arrLatex: Array<string>; //string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   export let opcion;
 
 </script>

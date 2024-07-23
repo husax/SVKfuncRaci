@@ -1,13 +1,10 @@
 <script lang="ts">
   import Tarjeta from './Tarjeta.svelte';
 	import TarjetaRaicesSelecFun from './TarjetaRaicesSelecFun.svelte';
-  import MsgModal from '../../components/MsgModal.svelte';
 	import TarjetaDeslizaPar from './TarjetaDeslizaPar.svelte';
   import {
     Button
   } from '@sveltestrap/sveltestrap';
-  import { MathQuillStatic } from "svelte-mathquill";
-	import Deslizador from '../../components/Deslizador.svelte';
 	import type { DeslPr, GeomElem, funR, paramF } from '../../tools/tipos';
 	import { ConstruyeFunParFijo, Raices } from '../../tools/TrazosPolinJSX';
 	import TeXToLinealPyt from '../../tools/TeXToLineal';
@@ -16,11 +13,11 @@
 	import { BorraObjGraficos, GraficaRaices } from '../../tools/TrazosJSXGraph';
 	import TarjetaPreguntaRaices from './TarjetaPreguntaRaices.svelte';
 	
-  export let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   //export let isOpen: boolean;
 
 
   let latex: string;
+  let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
   let deslProps: DeslPr= {
     id: "a",
     min: "-5",
@@ -46,26 +43,17 @@
                 " donde se tengan @n raices distintas."
               ];
   let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
-  let textosResp= ['Correcto. Observa tu respuesta en la gráfica', ];
+  const guardaTT= textosTarj.slice();
+  const guardaTC= textosCont.slice();
   let textosMult: Array<string>;
   
   let fun: funR;
   let infpol: InfijaAPolacaFR;
   let f: GeomElem;
-  let IsOpenSeq= [ true, false, false, false];
+  let IsOpenSeq= [ true, false, false];
 
-  let ActualizaGraf= (infpol: InfijaAPolacaFR, desl: DeslPr) => {
-    infpol.variables[desl.id]=Number.parseFloat(desl.value);
-  }
-  let accion=() => {
-    return;
-  }
 
   let pF: paramF;
-  //let resp1="2";
-  let mensaje="";
-  let headMsg="";
-  let bgColor="";
 
   const opcion= (e: MouseEvent) => {
     let ind= e.currentTarget.id;
@@ -103,8 +91,7 @@
 
   const contyPreg= (e: Event): void => {
     IsOpenSeq[1]=false;
-    IsOpenSeq[2]=true;
-    textosTarj[1]+=' de:';  
+    IsOpenSeq[2]=true; 
     textosTarj[2]='';
     const nomParam= "<strong><i>" +  deslProps.id + "</i></strong>";
     const numRaices= deslProps.id === "a" ? "2" : "3"; 
@@ -112,39 +99,13 @@
     textosCont[3]=textosCont[3].replaceAll("@n", numRaices);
     textosCont[4]=textosCont[4].replaceAll("@a", nomParam);
     textosCont[5]=textosCont[5].replaceAll("@a", nomParam);
-    textosMult= textosCont.slice(3, 6);
-  }
-
-  const evalyPreg= (e: Event) => {
-    //let r = Number.parseFloat($resp1)
-    let r= $resp1[0];
-    const dosRaices= deslProps.id === "a" ? true : false;
-    if (dosRaices) {
-      if (-5 < r && r < 4 ) {
-        mensaje="¡Efectivamente! Para ese valor del parámetro hay dos raices.";
-        headMsg="Respuesta Correcta";
-        bgColor="bg-success";
-      } else {
-        if (r=== 4) {
-          mensaje="En este caso hay una sola raíz aunque es doble. Inténtalo de nuevo";
-          headMsg="Revisa la pregunta";
-          bgColor="bg-warning";
-        } else {
-          mensaje="Para este valor del parámetro no hay raices. Inténtalo de nuevo.";
-          headMsg="Observa bien la Gráfica";
-          bgColor="bg-danger";
-        }
-      }
-      deslProps.value=$resp1[0].toString();
-      deslProps= deslProps;
-      IsOpenSeq[3]=true;
-    } else {
-      if (-2 < r && r < 2 ) {
-        console.log("Efectivamente para ese valor hay tres raices");
-        deslProps.value=$resp1.toString();
-        deslProps= deslProps;
-      }  
+    if (deslProps.id !== "a") {
+      textosCont[4]=textosCont[4].replace("doble.",
+                                           "doble y una raiz simple.");
+      textosCont[5]=textosCont[5].replace("no tenga raices reales.",
+                                           "tenga una raiz real.");
     }
+    textosMult= textosCont.slice(3, 6);
   }
 
   function actualizaVal (e: Event): void {
@@ -162,12 +123,21 @@
     GraficaRaices($brd, pF);
   }
 
+  function regresa () {
+    IsOpenSeq[2]=false;
+    IsOpenSeq[0]=true;
+    textosTarj= guardaTT.slice();
+    textosCont= guardaTC.slice();
+    BorraObjGraficos($brd, pF);
+    //IsOpenSeq= IsOpenSeq;
+
+  }
+
 </script>
 
-  <TarjetaRaicesSelecFun isOpen={IsOpenSeq[0]} textos={textosTarj} {opcion} />
+  <TarjetaRaicesSelecFun isOpen={IsOpenSeq[0]} textos={textosTarj} {arrLatex} {opcion} />
   <TarjetaDeslizaPar isOpen={IsOpenSeq[1]} textos={textosTarj} otrosTextos={textosCont[2]}
                     {latex} {deslProps} {actualizaVal} {contyPreg} />
-  <TarjetaPreguntaRaices isOpen={IsOpenSeq[2]} textos={textosTarj} otrosTextos={textosMult}
-                    {latex} {deslProps} {actualizaVal} />
+  <TarjetaPreguntaRaices {IsOpenSeq} textos={textosTarj} otrosTextos={textosMult}
+                    {latex} {deslProps} {actualizaVal} {regresa}/>
 
-  <MsgModal isOpen={IsOpenSeq[3]} headMsg={headMsg} msg={mensaje} {bgColor}/>

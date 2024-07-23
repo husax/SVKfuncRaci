@@ -1,59 +1,63 @@
 <script lang="ts">
   import Tarjeta from './Tarjeta.svelte';
-  import { Button, ListGroup, ListGroupItem} from '@sveltestrap/sveltestrap';
+  import { Button, ListGroup, ListGroupItem, Tooltip} from '@sveltestrap/sveltestrap';
   import {Icon} from "svelte-icons-pack";
   import {IoCheckmarkCircle, IoCloseCircle, IoAlertCircle} from "svelte-icons-pack/io"
   import { MathQuillStatic } from "svelte-mathquill";
 	import Deslizador from '../../components/Deslizador.svelte';
   import type { DeslPr, funEvent, paramF } from '../../tools/tipos';
-  import { resp1, resp2} from "../../tools/Almacen";
+  import { resp1} from "../../tools/Almacen";
   
-  export let isOpen: boolean;
+  //export let isOpen: boolean;
+  export let IsOpenSeq: Array<boolean>;
   export let textos: Array<string>;
   export let otrosTextos: Array<string>;
   export let latex: string;
   export let deslProps: DeslPr;
-  //export let resp1: string;
-  export let actualizaVal: funEvent  
-  //export let evalyPreg: funEvent;
+  export let actualizaVal: funEvent;
+  export let regresa;
 
   const colores= ['primary', 'secondary', 'primary'];
 
   let esvisible=false;
-  let acierto= [false, false, false];
+  let acierto= new Array<boolean>;
+  const tips=["¡muy bien!",
+              "mueve el deslizador al valor que propones para ver las raíces"
+            ];
+  let txtboton="Evalua";
 
   const evalua= (e: Event) => {
-    //let r = Number.parseFloat($resp1)
-    const dosRaices= deslProps.id === "a" ? true : false;
-    if (dosRaices) {
-      for (let i = 0; i < $resp1.length; i++) {
-        let r= $resp1[i];
-        switch (i) {
-          case 0:
-            acierto[0]= r < 4 ? true: false;
-            break;
-          case 1:
-            acierto[1]= r === 4 ? true: false;
-            break;
-          case 2:
-            acierto[2]= r > 4 ? true: false;
-            break;
-          default:
-              // no entra aqui;
-            break;
-        }
-      }
-      esvisible= true;
+    if (e.currentTarget.innerText === "Continua") {
+      //alert("adonde vamos");
+      regresa();
+      acierto= [false, false, false];
+      esvisible=false;
+      txtboton= "Evalua";
+      resp1.set([0,0,0]);
+      return;
     }
+    const dosRaices= deslProps.id === "a" ? true : false;
+    const raizDoble= dosRaices ? 4 : 2;
+    acierto= $resp1.map(function (elem, i) {
+      let r= dosRaices ? elem : Math.abs(elem);
+      // el arreglo tiene 3 elementos, sólo son 3 preguntas;
+      return i === 0 ? r < raizDoble : (i === 1 ? r === raizDoble : r > raizDoble);
+    });
+    esvisible= true;
+    txtboton= acierto.every((cv) => cv) ? "Continua" : "Evalua";
+    /* if (acierto.every((cv) => cv)) {
+      txtboton="Continua";
+    } */
+    return;
   }
 
-  const siAcepta= () => {alert("Si acepta click")};
+  //const siAcepta= () => {alert("Si acepta click")};
 
   // bind:value={deslProps.value} attrib cortado
 	
 </script>
 
-<Tarjeta {isOpen} {textos}>
+<Tarjeta isOpen={IsOpenSeq[2]} {textos}>
   <div class="centra">
     <MathQuillStatic {latex}/>
   </div>
@@ -69,20 +73,21 @@
             bind:value={$resp1[ind]}
           />
           <div class={esvisible ? "muestra" : "esconde"}>
-            <Button outline color="light" size="sm" on:click={siAcepta} > 
+            <Button id={`btn${ind}`} outline color="light" size="sm" > 
               <Icon src={acierto[ind] ? IoCheckmarkCircle : IoCloseCircle} 
                 color={acierto[ind] ? "green" : "red"} size="2em"/>
-              <!-- <Icon src={IoAlertCircle} color="green" size="1.5em"/>
-              <Icon src={IoCloseCircle} color="green" size="1.5em"/>
-              <Icon src={IoCheckmarkCircle} color="green" size="1.5em"/> -->
+              <!-- <Icon src={IoAlertCircle} color="green" size="1.5em"/> -->
             </Button>
+            <Tooltip target={`btn${ind}`} placement="right">
+              {acierto[ind] ? tips[0] : tips[1]}
+            </Tooltip>
           </div>  
         </ListGroupItem>  
       {/each}
     </ListGroup> 
   </div>
   <div class="separa">
-    <Button outline color="success" on:click={evalua}>Evalua</Button>
+    <Button outline color="success" on:click={evalua}>{txtboton}</Button>
   </div>
 </Tarjeta>
 

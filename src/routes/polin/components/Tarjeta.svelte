@@ -23,10 +23,14 @@
 <Fade {isOpen} >
   <Card class="mb-3" >
     <CardHeader>
-      <CardTitle>{textos[0]}</CardTitle>
+        <CardTitle >{textos[0]}</CardTitle>
     </CardHeader>
     <CardBody>
-      <CardSubtitle>{textos[1]}</CardSubtitle>
+        <CardSubtitle>
+          <div class="espaciado">
+            {textos[1]}
+          </div>
+        </CardSubtitle>
       <CardText>
         <div>
           {@html textos[2]}
@@ -37,3 +41,10 @@
     </CardBody>
   </Card>
 </Fade>
+
+<style>
+  .espaciado {
+    line-height: 3;
+    margin-bottom: 0.5rem;
+  }
+</style>
