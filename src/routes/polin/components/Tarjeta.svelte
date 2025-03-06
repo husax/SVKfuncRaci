@@ -10,8 +10,13 @@
     Fade,
   } from '@sveltestrap/sveltestrap';
   import {onDestroy} from 'svelte';
-  export let isOpen: boolean;
-  export let textos: Array<string>;
+  interface Props {
+    isOpen: boolean;
+    textos: Array<string>;
+    children?: import('svelte').Snippet;
+  }
+
+  let { isOpen, textos, children }: Props = $props();
   //export let accion: (e:MouseEvent) => void;
 
   onDestroy( () => {
@@ -35,8 +40,8 @@
         <div>
           {@html textos[2]}
         </div>
-        <slot>
-        </slot>
+        {#if children}{@render children()}{:else}
+        {/if}
       </CardText>
     </CardBody>
   </Card>

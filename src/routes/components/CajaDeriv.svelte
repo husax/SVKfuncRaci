@@ -9,10 +9,14 @@
   } from "../tools/TrazosJSXGraph";
   import { MathQuillStatic } from "svelte-mathquill";
 
-  export let latex: string;
-  export let animaRectaTang: Function;
-  let siGraf: boolean;
-  let siRectaTan = false;
+  interface Props {
+    latex: string;
+    animaRectaTang: Function;
+  }
+
+  let { latex, animaRectaTang }: Props = $props();
+  let siGraf: boolean = $state();
+  let siRectaTan = $state(false);
 
   const GrafDer = () => {
     let paramFunc = {
@@ -61,7 +65,7 @@
         type="checkbox"
         name="grafica"
         bind:checked={siGraf}
-        on:change={GrafDerONo}
+        onchange={GrafDerONo}
       />
       <label for="grafica">Ver gráfica</label>
     </ListGroupItem>
@@ -70,7 +74,7 @@
         type="checkbox"
         name="tangente"
         bind:checked={siRectaTan}
-        on:change={GrafTangONo}
+        onchange={GrafTangONo}
       />
       <label for="tangente">Ver Tangente</label>
       <Button

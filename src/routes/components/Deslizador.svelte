@@ -1,10 +1,14 @@
 <script lang="ts">
 import type { DeslPr } from "../tools/tipos";
-export let valor: string;
-export let deslProps: DeslPr;
-export let actualizaVal: (e: Event) => void;
+  interface Props {
+    valor: string;
+    deslProps: DeslPr;
+    actualizaVal: (e: Event) => void;
+  }
 
-$: etiq= deslProps.id+"="+valor;
+  let { valor, deslProps, actualizaVal }: Props = $props();
+
+let etiq= $derived(deslProps.id+"="+valor);
 
 
 
@@ -20,7 +24,7 @@ $: etiq= deslProps.id+"="+valor;
     max={deslProps.max}
     step={deslProps.step}
     value={valor}
-    on:input={actualizaVal}
+    oninput={actualizaVal}
   />
   {etiq}
 </label>

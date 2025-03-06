@@ -767,7 +767,8 @@ class InfijaAPolaca {
     InfijaAPolaca.errores[30] = "Hay más de una variable en la expresión";
     InfijaAPolaca.errores[31] =
       "El exponente debe ser una constante. No se obtiene una función racional";  
-  }
+      InfijaAPolaca.errores[32] = "Únicamente puedo obtener la raiz cuadrada de números"; 
+    }
 }
 
 // esta clase solo agrega la evaluación como funcion Racional
@@ -834,10 +835,20 @@ class InfijaAPolacaFR extends InfijaAPolaca {
             return undefined;
           }
           break;
-        case 7: // operador unario, signo -, aqui no hay funciones      
+        case 7: // operador unario, signo - o raiz cuadrada      
           oper1 = pilaCalc.pop();
           if (oper1 !== undefined) {
-            pilaCalc.push(oper1.ProductoPorN(-1));
+            if (par.cad === "sqrt") {
+              if (!oper1.esConstante) {
+                InfijaAPolaca.nErr = -32; // el exponente debe ser una constante
+                return undefined;
+              }
+              pol = Polinomio.Monomio(Math.sqrt(oper1.coefs[0]), 0, variable)
+              pilaCalc.push(pol);
+            }
+            else {
+              pilaCalc.push(oper1.ProductoPorN(-1));
+            }
           }
           else {
             InfijaAPolaca.nErr = -20; // error: se perdio un operando

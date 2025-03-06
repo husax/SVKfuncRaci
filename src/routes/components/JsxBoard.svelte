@@ -1,3 +1,4 @@
+<!-- @migration-task Error while migrating Svelte code: Can't migrate code with beforeUpdate. Please migrate by hand. -->
 <script lang="ts">
 import JXG from '../tools/jsxgraphcore.mjs';
 import { onMount, beforeUpdate, onDestroy} from 'svelte';

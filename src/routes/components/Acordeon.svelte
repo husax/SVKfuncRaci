@@ -3,10 +3,19 @@
   import { onDestroy} from 'svelte';
   import { BorraRectaTang, BorraGrafDer } from "../tools/TrazosJSXGraph"; 
   import CajaDeriv from "./CajaDeriv.svelte";
-  export let items: any;
-  export let ActualizaGraf: any;
-  export let muestra = true;
-  export let animaRectaTang: any;
+  interface Props {
+    items: any;
+    ActualizaGraf: any;
+    muestra?: boolean;
+    animaRectaTang: any;
+  }
+
+  let {
+    items,
+    ActualizaGraf,
+    muestra = true,
+    animaRectaTang
+  }: Props = $props();
   let sp=false;
   
   onDestroy( () => {
@@ -27,7 +36,7 @@
           }
         }}
       >
-        <h4 class="m-0" slot="header">{item.titulo}</h4>
+        <h4 class="m-0" slot="header" >{item.titulo}</h4>
         {#if ind === 4}
           <CajaDeriv 
             latex={item.contenido}

@@ -16,18 +16,18 @@
   //export let isOpen: boolean;
 
 
-  let latex: string;
+  let latex: string = $state();
   let arrLatex: string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
-  let deslProps: DeslPr= {
+  let deslProps: DeslPr= $state({
     id: "a",
     min: "-5",
     max: "5",
     step:".1",
     value: "-2",
-  }
+  })
 
 
-  let textosCont= ["Revisa gráficamente cuántas raices reales tiene un polinomio."
+  let textosCont= $state(["Revisa gráficamente cuántas raices reales tiene un polinomio."
                 + "<br> Elige un tipo de polinomio.",
                 "Mueve el deslizador para observar cómo cambia el número"
                 + " de raices de: ",
@@ -41,16 +41,16 @@
                 " donde no tenga raices reales. @a = ",
                 "Ahora dame el mayor intervalo de valores de @a" + 
                 " donde se tengan @n raices distintas."
-              ];
-  let textosTarj= ['Raices', 'Número de Raices', textosCont[0]];
+              ]);
+  let textosTarj= $state(['Raices', 'Número de Raices', textosCont[0]]);
   const guardaTT= textosTarj.slice();
   const guardaTC= textosCont.slice();
-  let textosMult: Array<string>;
+  let textosMult: Array<string> = $state();
   
   let fun: funR;
   let infpol: InfijaAPolacaFR;
   let f: GeomElem;
-  let IsOpenSeq= [ true, false, false];
+  let IsOpenSeq= $state([ true, false, false]);
 
 
   let pF: paramF;

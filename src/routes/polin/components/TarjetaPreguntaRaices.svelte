@@ -9,22 +9,34 @@
   import { resp1} from "../../tools/Almacen";
   
   //export let isOpen: boolean;
-  export let IsOpenSeq: Array<boolean>;
-  export let textos: Array<string>;
-  export let otrosTextos: Array<string>;
-  export let latex: string;
-  export let deslProps: DeslPr;
-  export let actualizaVal: funEvent;
-  export let regresa;
+  interface Props {
+    IsOpenSeq: Array<boolean>;
+    textos: Array<string>;
+    otrosTextos: Array<string>;
+    latex: string;
+    deslProps: DeslPr;
+    actualizaVal: funEvent;
+    regresa: any;
+  }
+
+  let {
+    IsOpenSeq,
+    textos,
+    otrosTextos,
+    latex,
+    deslProps,
+    actualizaVal,
+    regresa
+  }: Props = $props();
 
   const colores= ['primary', 'secondary', 'primary'];
 
-  let esvisible=false;
-  let acierto= new Array<boolean>;
+  let esvisible=$state(false);
+  let acierto= $state(new Array<boolean>);
   const tips=["¡muy bien!",
               "mueve el deslizador al valor que propones para ver las raíces"
             ];
-  let txtboton="Evalua";
+  let txtboton=$state("Evalua");
 
   const evalua= (e: Event) => {
     if (e.currentTarget.innerText === "Continua") {

@@ -3,16 +3,21 @@
   import BarraNav from "./BarraNav.svelte";
   import type {OptMenu, DatosHead} from "../tools/tipos";
   let logoImg = "/logo.jpg";
-  let opc: OptMenu[]= [{
+  /* let opc: OptMenu[]= [{
     href: "",
     texto: "",
-  }];
-  export let datosH: DatosHead= {
-    funcTipo: "",
-		tarea: "",
-		titMnu: "",
-		opcMnu: opc,
-  };
+  }]; */
+  interface Props {
+    datosH: DatosHead;
+  }
+
+  let { datosH // = {
+    //funcTipo: "",
+		//tarea: "",
+		//titMnu: "",
+		//opcMnu: opc,
+  //}
+   }: Props = $props();
 </script>
 
 <Container fluid>

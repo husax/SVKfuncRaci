@@ -14,12 +14,17 @@ import {
 } from '@sveltestrap/sveltestrap';
 import type {OptMenu, DatosHead} from "../tools/tipos";
 
-export let datosH: DatosHead;
+  interface Props {
+    datosH: DatosHead;
+  }
+
+  let { datosH }: Props = $props();
 
 
 let hayTitMnu= datosH.titMnu !== "";
+console.log($state.snapshot(datosH));
 
-let isOpen = false;
+let isOpen = $state(true);
 
 const toggle= () => (isOpen = !isOpen);
 
@@ -30,13 +35,13 @@ function handleUpdate(event: any) {
 
 </script>
 
-<Navbar class="navbar-dark bg-dark navbar-expand-lg">
-  <NavbarBrand href="#home" class="text-white">
+<Navbar color="dark" dark expand="lg" container="fluid">
+  <NavbarBrand href="#home">
     Funciones {datosH.funcTipo}: {datosH.tarea} 
   </NavbarBrand>
-  <NavbarToggler on:click={toggle} class="me-2"  />
+  <NavbarToggler on:click={toggle}/>
   <Collapse {isOpen} navbar expand="lg" on:update={handleUpdate}>
-    <Nav  class="ms-auto text-light" navbar>
+    <Nav  class="ms-auto" navbar>
       <NavItem>
         <NavLink href="/">Inicio</NavLink>
       </NavItem>

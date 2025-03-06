@@ -2,10 +2,19 @@
   import Tarjeta from './Tarjeta.svelte';
   import { ListGroup, ListGroupItem } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
-  export let isOpen: boolean;
-  export let textos: Array<string>;
-  export let arrLatex: Array<string>; //string[]= ['f(x)=x^2+4x+a', 'g(x)=x^3-3x+b'];
-  export let opcion;
+  interface Props {
+    isOpen: boolean;
+    textos: Array<string>;
+    arrLatex: Array<string>;
+    opcion: any;
+  }
+
+  let {
+    isOpen,
+    textos,
+    arrLatex,
+    opcion
+  }: Props = $props();
 
 </script>
 

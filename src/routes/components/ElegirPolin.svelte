@@ -11,7 +11,11 @@
   } from '@sveltestrap/sveltestrap';
   import { ListGroup, ListGroupItem } from '@sveltestrap/sveltestrap';
   import { MathQuillStatic } from "svelte-mathquill";
-  export let arrLatex: string[];
+  interface Props {
+    arrLatex: string[];
+  }
+
+  let { arrLatex }: Props = $props();
 </script>
 
 <Card class="mb-3">

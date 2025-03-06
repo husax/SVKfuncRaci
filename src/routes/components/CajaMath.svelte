@@ -1,8 +1,13 @@
 <script lang="ts">
   import { InputGroup, InputGroupText, Button } from "@sveltestrap/sveltestrap";
   import { MathQuill, MathQuillStatic } from "svelte-mathquill";
-  export let latex: string;
-  export let disabled: boolean;
+	import { handlers } from "svelte/legacy";
+  interface Props {
+    latex: string;
+    disabled: boolean;
+  }
+
+  let { latex = $bindable(), disabled }: Props = $props();
 
 
   function filtro(e: any) {
@@ -18,7 +23,7 @@
       "Home",
       "End",
     ];
-    const caracAcep = "0123456789x+-/*()=.sqrtpi";
+    const caracAcep = "0123456789x+-/*^()=.sqrtpi";
     if (teclasEsp.indexOf(e.key) !== -1 || caracAcep.indexOf(e.key) !== -1) {
       return;
     }
@@ -38,7 +43,7 @@
   {#if disabled}
     <MathQuillStatic {latex} />
   {:else}
-    <MathQuill bind:latex={latex} {config} />
+    <MathQuill bind:latex={latex} {config} {filtro} />
   {/if}
   <Button color={"success"} size="sm" on:click>
     {disabled ? "Cambia función" : "Aceptar"}

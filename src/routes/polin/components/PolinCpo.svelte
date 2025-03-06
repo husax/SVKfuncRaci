@@ -11,8 +11,8 @@ let boardAttributes = {
 //brd.set(null);
 let jxgCajaId='cajaPolin';
 let arrL=['x^3-3x+1', '5x^5-3x^2+1'];
-let tarjeta: Tarjeta;
-let isOpen= true;
+let tarjeta: Tarjeta = $state();
+let isOpen= $state(true);
 let textosTarj=[
 	['Tutoriales de polinomios',
 	 '',
@@ -24,7 +24,7 @@ let textosTarj=[
   'Por ejemplo: monotonia, concavidad, extremos comportamiento al infinito'
 	]	
 ];
-let tutoriales= false;
+let tutoriales= $state(false);
 let isOpenTut=true;
 let accionTutor= (e: MouseEvent) => {
 	

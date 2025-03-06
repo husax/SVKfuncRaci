@@ -2,15 +2,24 @@
 	import { Button, Modal, ModalBody, ModalFooter, ModalHeader } from '@sveltestrap/sveltestrap';
 	import { createEventDispatcher } from 'svelte';
 
-	export let isOpen: boolean;
-	export let msg: string;
-	export let headMsg: string;
-	export let bgColor: string;
+	interface Props {
+		isOpen: boolean;
+		msg: string;
+		headMsg: string;
+		bgColor: string;
+	}
+
+	let {
+		isOpen = $bindable(),
+		msg,
+		headMsg,
+		bgColor
+	}: Props = $props();
 	const toggle = () => (isOpen = !isOpen);
 
 	const dispatch = createEventDispatcher();
 
-	$: colorBoton= bgColor.slice(3);
+	let colorBoton= $derived(bgColor.slice(3));
 
 	function Cierra() {
 		toggle();

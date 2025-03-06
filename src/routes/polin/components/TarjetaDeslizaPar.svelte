@@ -4,13 +4,25 @@
   import { MathQuillStatic } from "svelte-mathquill";
   import Deslizador from '../../components/Deslizador.svelte';
   import type { DeslPr, funEvent } from '../../tools/tipos';
-  export let isOpen: boolean;
-  export let textos: Array<string>;
-  export let otrosTextos: string;
-  export let latex: string;
-  export let deslProps: DeslPr;
-  export let actualizaVal: funEvent;
-  export let contyPreg: funEvent;
+  interface Props {
+    isOpen: boolean;
+    textos: Array<string>;
+    otrosTextos: string;
+    latex: string;
+    deslProps: DeslPr;
+    actualizaVal: funEvent;
+    contyPreg: funEvent;
+  }
+
+  let {
+    isOpen,
+    textos,
+    otrosTextos,
+    latex,
+    deslProps,
+    actualizaVal,
+    contyPreg
+  }: Props = $props();
 
   //let resp1: string;
   
