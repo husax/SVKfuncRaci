@@ -28,20 +28,20 @@
 <Fade {isOpen} >
   <Card class="mb-3" >
     <CardHeader>
-        <CardTitle >{textos[0]}</CardTitle>
+        <CardTitle >{textos[0]}</CardTitle> 
     </CardHeader>
     <CardBody>
-        <CardSubtitle>
-          <div class="espaciado">
-            {textos[1]}
-          </div>
-        </CardSubtitle>
+      <CardSubtitle>
+        <div class="espaciado">
+          {textos[1]}
+        </div>
+      </CardSubtitle>
       <CardText>
-        <div>
+        <div class="espaciado">
           {@html textos[2]}
         </div>
-        {#if children}{@render children()}{:else}
-        {/if}
+        {#if children}{@render children()}
+        {/if} 
       </CardText>
     </CardBody>
   </Card>
@@ -49,7 +49,7 @@
 
 <style>
   .espaciado {
-    line-height: 3;
-    margin-bottom: 0.5rem;
+    line-height: 1.5;
+    padding-bottom: 0.5rem;
   }
 </style>
